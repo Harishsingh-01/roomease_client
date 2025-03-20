@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API from "../utils/axiosInstance"; // Import the axios instance
+
 
 const AddRoom = () => {
   const [roomData, setRoomData] = useState({
@@ -32,8 +34,8 @@ const AddRoom = () => {
       };
       const token = localStorage.getItem("token");
 
-      const res = await axios.post(
-        "http://localhost:5000/api/admin/addrooms",
+      const res = await API.post(
+        "/api/admin/addrooms",
         formattedData,
         {
           headers: { Authorization: `${token}` },

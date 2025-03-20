@@ -12,7 +12,7 @@ const AdminDashboard = () => {
     const fetchAdminData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const roomsRes = await axios.get("http://localhost:5000/api/rooms", {
+        const roomsRes = await API.get("/api/rooms", {
           headers: { Authorization: `${token}` },
         });
         setRooms(roomsRes.data);
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     if (!window.confirm("Are you sure you want to delete this room?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/admin/delete/${roomId}`, {
+      await API.delete(`/api/admin/delete/${roomId}`, {
         headers: { Authorization: `${token}` },
       });
       setRooms((prevRooms) => prevRooms.filter((room) => room._id !== roomId));

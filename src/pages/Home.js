@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import roomImage from "./download.jpg";
+import API from "../utils/axiosInstance"; // Import the axios instance
+
 
 const Home = () => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/rooms`, { withCredentials: true }) // Adjust API route as per backend
+    API.get(`/api/rooms`, { withCredentials: true }) // Adjust API route as per backend
       .then((res) => {
         setRooms(res.data);
       })
