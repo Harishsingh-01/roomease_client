@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../utils/axiosInstance"; // Import the axios instance
-
 
 const SuccessPage = () => {
   const location = useLocation();
@@ -10,7 +8,7 @@ const SuccessPage = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
-    if (isConfirmed) return; // Prevents duplicate requests
+    if (isConfirmed) return; // Prevent duplicate requests
     setIsConfirmed(true);
 
     const confirmBooking = async () => {
@@ -22,16 +20,15 @@ const SuccessPage = () => {
       const totalPrice = params.get("totalPrice");
 
       if (!roomId || !userId || !checkIn || !checkOut || !totalPrice) {
-        console.error("Missing booking details.");
         alert("Invalid booking details.");
         return;
       }
 
       try {
-        console.log("📤 Sending booking request with data:", { roomId, userId, checkIn, checkOut, totalPrice });
+        console.log("📤 Sending booking request...");
 
-        // ✅ Step 1: Confirm Booking
-        const bookingResponse = await API.post("/api/payments/confirm-booking", {
+        // ✅ Call Backend API to confirm booking
+        const response = await API.post("/api/bookings/confirm-booking", {
           roomId,
           userId,
           checkIn,
@@ -39,42 +36,13 @@ const SuccessPage = () => {
           totalPrice,
         });
 
-        console.log("✅ Booking response:", bookingResponse.data);
+        console.log("✅ Booking response:", response.data);
         alert("Booking successful!");
 
-        // ✅ Step 2: Send Confirmation Email
-        const userResponse = await API.get(`/api/users/${userId}`);
-        if (!userResponse.data || !userResponse.data.email) {
-          console.error("❌ Failed to fetch user email.");
-          alert("Failed to retrieve user email.");
-          return;
-        }
-        const userEmail = userResponse.data.email;
-
-
-        console.log("📧 Sending confirmation email to:");
-        await API.post("/api/auth/send-booking-email", { email:userEmail });
-
-        console.log("✅ Email sent successfully!");
-        alert("Confirmation email sent!");
-
         navigate("/bookings"); // Redirect to bookings page
-
       } catch (error) {
         console.error("❌ Booking confirmation failed:", error);
-
-        if (error.response) {
-          console.error("🔴 Response Data:", error.response.data);
-          console.error("🟡 Response Status:", error.response.status);
-          console.error("🔵 Response Headers:", error.response.headers);
-          alert(`Booking failed: ${error.response.data.error || "Unknown error"}`);
-        } else if (error.request) {
-          console.error("🟠 No response received from server:", error.request);
-          alert("Booking failed: No response from server");
-        } else {
-          console.error("🟣 Error setting up request:", error.message);
-          alert(`Booking failed: ${error.message}`);
-        }
+        alert("Booking failed. Please try again.");
       }
     };
 
