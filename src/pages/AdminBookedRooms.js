@@ -3,7 +3,6 @@ import axios from "axios";
 import roomImage from "./download.jpg";
 import API from "../utils/axiosInstance";
 import { Hotel, DollarSign, Info, Calendar, User } from "lucide-react"; // Import icons
-import API from "../utils/axiosInstance"; // Import the axios instance
 
 
 const AdminBookedRooms = () => {

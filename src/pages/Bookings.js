@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import API from "../utils/axiosInstance";
 import { Calendar, Clock, DollarSign, Hotel, CheckCircle, XCircle } from "lucide-react";
-import API from "../utils/axiosInstance"; // Import the axios instance
 
 
 const Bookings = () => {
