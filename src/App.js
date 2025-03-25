@@ -19,7 +19,7 @@ import UpdateRoom from "./pages/UpdateRoom";
 import AdminBookedRooms from "./pages/AdminBookedRooms"
 import UsersData from "./pages/UsersData";
 import { isTokenExpired } from "./utils/auth";
-// import Review from './pages/Review';
+import Review from './pages/Review';
 import ContactUs from './pages/ContactUs';
 import AdminContacts from './pages/AdminContacts';  
 

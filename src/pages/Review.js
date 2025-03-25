@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Edit2, Trash2, X } from 'lucide-react';
 import axios from 'axios';
+import API from "../utils/axiosInstance"; // Import the axios instance
+
 
 const Review = () => {
   const { bookingId } = useParams();
@@ -20,8 +22,8 @@ const Review = () => {
   const fetchReview = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:5000/api/reviews/booking/${bookingId}`,
+      const response = await API.get(
+        `/api/reviews/booking/${bookingId}`,
         {
           headers: { Authorization: `${token}` }
         }
@@ -43,8 +45,8 @@ const Review = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const bookingResponse = await axios.get(
-          `http://localhost:5000/api/bookings/${bookingId}`,
+        const bookingResponse = await API.get(
+          `/api/bookings/${bookingId}`,
           {
             headers: { Authorization: `${token}` }
           }
@@ -79,8 +81,8 @@ const Review = () => {
       console.log('Submitting review data:', reviewData);
 
       if (isEditing && existingReview) {
-        await axios.put(
-          `http://localhost:5000/api/reviews/edit/${existingReview._id}`,
+        await API.put(
+          `/api/reviews/edit/${existingReview._id}`,
           reviewData,
           {
             headers: { 
@@ -90,8 +92,8 @@ const Review = () => {
           }
         );
       } else {
-        const response = await axios.post(
-          'http://localhost:5000/api/reviews/add',
+        const response = await API.post(
+          '/api/reviews/add',
           reviewData,
           {
             headers: { 
@@ -118,8 +120,8 @@ const Review = () => {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(
-        `http://localhost:5000/api/reviews/delete/${existingReview._id}`,
+      await API.delete(
+        `/api/reviews/delete/${existingReview._id}`,
         {
           headers: { Authorization: `${token}` }
         }
