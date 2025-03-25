@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import API from "../utils/axiosInstance";
+
 
 const AdminContacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -7,15 +9,20 @@ const AdminContacts = () => {
 
   useEffect(() => {
     const fetchContacts = async () => {
-      try {
-        const token = localStorage.getItem("token"); // Get token from localStorage
-        const response = await fetch("http://localhost:5000/api/contact/contacts", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-        });
+        try {
+            const token = localStorage.getItem("token"); // Get token from localStorage
+            const response = await API.get("/api/contact/contacts", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `${token}`,
+                },
+            });
+        
+            console.log(response.data); // Handle response data
+        } catch (error) {
+            console.error("Error fetching contacts:", error.response ? error.response.data : error.message);
+        }
+        }});
 
         if (!response.ok) {
           throw new Error("Failed to fetch contacts. Make sure you are an admin.");
