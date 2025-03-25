@@ -3,7 +3,6 @@ import axios from "axios";
 import API from "../utils/axiosInstance";
 import { Calendar, Clock, DollarSign, Hotel, CheckCircle, XCircle, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import API from "../utils/axiosInstance"; // Import the axios instance
 
 
 const Bookings = () => {
