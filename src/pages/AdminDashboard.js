@@ -25,6 +25,7 @@ const AdminDashboard = () => {
         const roomsRes = await API.get("/api/rooms", {
           headers: { Authorization: `${token}` },
         });
+        console.log("Rooms data:", roomsRes.data);
         setRooms(roomsRes.data);
         
         const totalRooms = roomsRes.data.length;
@@ -139,9 +140,12 @@ const AdminDashboard = () => {
               <div key={room._id} className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <img
-                    src={room.imageUrl}
+                    src={room.mainImage || room.imageUrl}
                     alt={room.name}
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
+                    }}
                   />
                   <div className="absolute top-4 right-4">
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -169,13 +173,13 @@ const AdminDashboard = () => {
                   <div className="mb-4">
                     <h4 className="text-sm font-medium text-gray-900 mb-2">Amenities</h4>
                     <div className="flex flex-wrap gap-2">
-                      {room.amenities && room.amenities.length > 0 ? (
+                      {Array.isArray(room.amenities) && room.amenities.length > 0 ? (
                         room.amenities.map((amenity, index) => (
                           <span 
                             key={index}
                             className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
                           >
-                            {amenity}
+                            {amenity.trim()}
                           </span>
                         ))
                       ) : (
