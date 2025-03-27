@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import roomImage from "./download.jpg";
 import { Hotel, DollarSign, Eye, Calendar, Check, Search } from "lucide-react";
 import API from "../utils/axiosInstance";
 
@@ -74,7 +73,7 @@ const AvailableRooms = () => {
                   {/* Room Image */}
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
-                      src={room.mainImage || room.imageUrl || "https://via.placeholder.com/400x300?text=No+Image"}
+                      src={room.mainImage}
                       alt={room.name}
                       className="w-full h-56 object-cover transform hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
