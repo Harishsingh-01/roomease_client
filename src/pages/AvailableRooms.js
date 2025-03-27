@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import roomImage from "./download.jpg";
 import { Hotel, DollarSign, Eye, Calendar, Check, Search } from "lucide-react";
-import API from "../utils/axiosInstance"; 
+import API from "../utils/axiosInstance";
 
 
 const AvailableRooms = () => {
@@ -74,7 +74,7 @@ const AvailableRooms = () => {
                   {/* Room Image */}
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
-                      src={room.mainImage}
+                      src={room.mainImage || room.imageUrl || "https://via.placeholder.com/400x300?text=No+Image"}
                       alt={room.name}
                       className="w-full h-56 object-cover transform hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
@@ -120,18 +120,18 @@ const AvailableRooms = () => {
                     )}
 
                     {/* View Details Button */}
-              <Link
-                to={`/room/${room._id}`}
+                    <Link
+                      to={`/room/${room._id}`}
                       className="mt-4 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300"
-              >
+                    >
                       <Eye className="w-4 h-4 mr-2" />
-                View Details
-              </Link>
+                      View Details
+                    </Link>
                   </div>
                 </div>
-          ))}
+              ))}
             </div>
-      )}
+          )}
         </div>
       </div>
     </div>
