@@ -139,7 +139,7 @@ const AdminDashboard = () => {
               <div key={room._id} className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <img
-                    src={room.image || roomImage}
+                    src={room.imageUrl}
                     alt={room.name}
                     className="w-full h-48 object-cover"
                   />

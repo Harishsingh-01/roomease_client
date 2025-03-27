@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import roomImage from "./download.jpg";
 import { 
   Calendar, DollarSign, Users, Home, Coffee, Wifi, Star, MapPin, 
   ChevronLeft, Loader, Tv, Wind, Utensils, Bath, 
@@ -29,6 +28,13 @@ const RoomDetails = () => {
     'Room Service': <Phone className="h-5 w-5" />,
     'Security': <Lock className="h-5 w-5" />,
     'default': <Home className="h-5 w-5" />
+  };
+
+  const defaultImage = "https://via.placeholder.com/400x300?text=No+Image+Available";
+
+  const getAllImages = () => {
+    if (!room) return [defaultImage];
+    return [room.mainImage, ...(room.additionalImages || [])].filter(Boolean);
   };
 
   useEffect(() => {
@@ -78,8 +84,6 @@ const RoomDetails = () => {
   );
 
   if (!room) return null;
-
-  const mockImages = [roomImage, roomImage, roomImage];
 
   const RatingBreakdown = ({ reviews }) => {
     if (!reviews || !Array.isArray(reviews)) {
@@ -195,22 +199,30 @@ const RoomDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative h-96 rounded-lg overflow-hidden">
               <img 
-                src={mockImages[selectedImage]} 
-                alt={`Room view ${selectedImage + 1}`}
+                src={getAllImages()[selectedImage]} 
+                alt={`${room.name} - View ${selectedImage + 1}`}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.src = defaultImage;
+                }}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              {mockImages.map((img, index) => (
+              {getAllImages().map((img, index) => (
                 <div 
                   key={index}
-                  className="relative h-44 rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                  className={`relative h-44 rounded-lg overflow-hidden cursor-pointer 
+                    ${selectedImage === index ? 'ring-2 ring-green-500' : 'hover:opacity-90'}
+                    transition-all duration-200`}
                   onClick={() => setSelectedImage(index)}
                 >
                   <img 
                     src={img} 
-                    alt={`Room view ${index + 1}`}
+                    alt={`${room.name} - View ${index + 1}`}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = defaultImage;
+                    }}
                   />
                 </div>
               ))}

@@ -161,7 +161,7 @@ const Home = () => {
                   alt={room.name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
-                  console.log("room"+room.imageUrl)
+                  
                   <div className="absolute top-4 right-4 flex gap-2">
                     <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
                       room.available 

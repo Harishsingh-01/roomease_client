@@ -74,7 +74,7 @@ const AvailableRooms = () => {
                   {/* Room Image */}
                   <div className="relative">
                     <img
-                      src={roomImage}
+                      src={room.imageUrl}
                       alt={room.name}
                       className="w-full h-56 object-cover"
                     />

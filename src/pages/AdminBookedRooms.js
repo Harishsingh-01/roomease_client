@@ -78,7 +78,7 @@ const AdminBookedRooms = () => {
                   {/* Room Image */}
                   <div className="relative">
                     <img
-                      src={roomImage}
+                      src={room.imageUrl}
                       alt={room.name}
                       className="w-full h-48 object-cover"
                     />
