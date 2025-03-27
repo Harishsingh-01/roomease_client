@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Edit2, Trash2, X } from 'lucide-react';
 import axios from 'axios';
-import API from "../utils/axiosInstance"; // Import the axios instance
-
+import API from "../utils/axiosInstance"; 
 
 const Review = () => {
   const { bookingId } = useParams();
@@ -78,7 +77,6 @@ const Review = () => {
         review: formData.review
       };
 
-      console.log('Submitting review data:', reviewData);
 
       if (isEditing && existingReview) {
         await API.put(
@@ -102,7 +100,6 @@ const Review = () => {
             }
           }
         );
-        console.log('Review submission response:', response.data);
       }
       
       await fetchReview();

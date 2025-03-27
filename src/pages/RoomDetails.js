@@ -7,8 +7,7 @@ import {
   ChevronLeft, Loader, Tv, Wind, Utensils, Bath, 
   Music, Phone, Lock, ThumbsUp
 } from "lucide-react";
-import API from "../utils/axiosInstance"; // Import the axios instance
-
+import API from "../utils/axiosInstance";
 
 const RoomDetails = () => {
   const { roomId } = useParams();
@@ -19,7 +18,6 @@ const RoomDetails = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [reviews, setReviews] = useState([]);
 
-  // Amenity icon mapping
   const amenityIcons = {
     'Wifi': <Wifi className="h-5 w-5" />,
     'TV': <Tv className="h-5 w-5" />,
@@ -30,7 +28,7 @@ const RoomDetails = () => {
     'Music System': <Music className="h-5 w-5" />,
     'Room Service': <Phone className="h-5 w-5" />,
     'Security': <Lock className="h-5 w-5" />,
-    'default': <Home className="h-5 w-5" /> // Default icon for unknown amenities
+    'default': <Home className="h-5 w-5" />
   };
 
   useEffect(() => {
@@ -40,15 +38,11 @@ const RoomDetails = () => {
         const response = await API.get(
           `/api/rooms/${roomId}`
         );
-        console.log('Room details response:', response.data); // Debug log
 
         setRoom(response.data);
         if (response.data.reviews && Array.isArray(response.data.reviews)) {
-          console.log('Setting reviews:', response.data.reviews); // Debug log
           setReviews(response.data.reviews);
-          console.log("sdsd");
         } else {
-          console.log('No reviews found, setting empty array'); // Debug log
           setReviews([]);
         }
       } catch (err) {
@@ -62,14 +56,12 @@ const RoomDetails = () => {
     fetchRoomDetails();
   }, [roomId]);
 
-  // Loading state
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
       <Loader className="h-8 w-8 text-green-500 animate-spin" />
     </div>
   );
 
-  // Error state
   if (error) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center p-8 bg-red-50 rounded-lg">
@@ -85,10 +77,8 @@ const RoomDetails = () => {
     </div>
   );
 
-  // No room data
   if (!room) return null;
 
-  // Mock data for demonstration
   const mockImages = [roomImage, roomImage, roomImage];
 
   const RatingBreakdown = ({ reviews }) => {
@@ -96,32 +86,23 @@ const RoomDetails = () => {
       return null;
     }
 
-    // Initialize rating counts array (index 0 = 1 star, index 4 = 5 stars)
     const ratingCounts = Array(5).fill(0);
 
-    // Count ratings
     reviews.forEach(review => {
       if (review && review.rating && review.rating >= 1 && review.rating <= 5) {
-        // Subtract 1 from rating to get correct array index (5 star rating goes to index 4)
         ratingCounts[review.rating - 1]++;
       }
     });
 
-    console.log('Rating counts:', ratingCounts); // Debug log
-
     const totalReviews = reviews.length;
-    console.log('Total reviews:', totalReviews); // Debug log
 
     return (
       <div className="mt-6 space-y-4">
         <h3 className="text-lg font-semibold">Rating Breakdown</h3>
-        {/* Display bars from 5 stars to 1 star */}
         {[5, 4, 3, 2, 1].map((stars) => {
           const count = ratingCounts[stars - 1];
           const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
           
-          console.log(`${stars} stars:`, { count, percentage }); // Debug log
-
           return (
             <div key={stars} className="flex items-center space-x-2">
               <span className="w-20 text-sm text-gray-600">{stars} stars</span>
@@ -140,7 +121,6 @@ const RoomDetails = () => {
   };
 
   const ReviewList = ({ reviews }) => {
-    console.log('ReviewList received reviews:', reviews); // Debug log
     
     if (!reviews || !Array.isArray(reviews) || reviews.length === 0) {
       return (
@@ -190,7 +170,6 @@ const RoomDetails = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Navigation */}
         <button 
           onClick={() => navigate(-1)}
           className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
@@ -199,30 +178,19 @@ const RoomDetails = () => {
           Back to Rooms
         </button>
 
-        {/* Room Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{room.name}</h1>
-            {/* <div className="flex items-center text-gray-600">
-              <MapPin className="h-5 w-5 mr-2" />
-              <span>Premium Location</span>
-              <div className="mx-2">•</div>
-              <div className="flex items-center">
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <span>4.9 (128 reviews)</span>
-              </div>
-            </div> */}
           </div>
           <div className="mt-4 lg:mt-0">
             <div className="flex items-center text-3xl font-bold text-green-600">
               <DollarSign className="h-6 w-6" />
               {room.price}
-              <span className="text-gray-500 text-lg font-normal">/night</span>
+              <span className="text-gray-500 text-lg font-normal">/Month</span>
             </div>
           </div>
         </div>
 
-        {/* Image Gallery */}
         <div className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative h-96 rounded-lg overflow-hidden">
@@ -250,17 +218,13 @@ const RoomDetails = () => {
           </div>
         </div>
 
-        {/* Room Details Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Description */}
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <h2 className="text-xl font-semibold mb-4">About this room</h2>
               <p className="text-gray-600 leading-relaxed">{room.description}</p>
             </div>
 
-            {/* Updated Amenities Section */}
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <h2 className="text-xl font-semibold mb-4">Amenities</h2>
               {room.amenities && room.amenities.length > 0 ? (
@@ -284,7 +248,6 @@ const RoomDetails = () => {
               )}
             </div>
 
-            {/* Additional Amenities Info */}
             {room.amenities && room.amenities.length > 0 && (
               <div className="bg-green-50 p-4 rounded-lg">
                 <p className="text-sm text-green-700">
@@ -293,7 +256,6 @@ const RoomDetails = () => {
               </div>
             )}
 
-            {/* Reviews Section */}
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="flex items-center">
@@ -324,7 +286,6 @@ const RoomDetails = () => {
               )}
             </div>
 
-            {/* House Rules */}
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <h2 className="text-xl font-semibold mb-4">House Rules</h2>
               <ul className="space-y-2 text-gray-600">
@@ -336,18 +297,16 @@ const RoomDetails = () => {
                   <Home className="h-5 w-5 mr-2" />
                   Check-out: Before 12:00 PM
                 </li>
-                {/* Add more rules as needed */}
               </ul>
             </div>
           </div>
 
-          {/* Booking Card */}
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-xl shadow-sm sticky top-8">
               <h3 className="text-xl font-semibold mb-4">Book this room</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-gray-600">
-                  <span>₹{room.price} x 1 night</span>
+                  <span>₹{room.price} x 1 Month</span>
                   <span>₹{room.price}</span>
                 </div>
                 <div className="flex items-center justify-between text-gray-600">

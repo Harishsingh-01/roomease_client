@@ -6,8 +6,7 @@ import {
   Hotel, Trash2, Edit, Eye, Plus, Users, Book, 
   DollarSign, Percent, TrendingUp, BarChart4 
 } from "lucide-react";
-import API from "../utils/axiosInstance"; // Import the axios instance
-
+import API from "../utils/axiosInstance";
 
 const AdminDashboard = () => {
   const [rooms, setRooms] = useState([]);
@@ -28,7 +27,6 @@ const AdminDashboard = () => {
         });
         setRooms(roomsRes.data);
         
-        // Calculate stats
         const totalRooms = roomsRes.data.length;
         const availableRooms = roomsRes.data.filter(room => room.available).length;
         const bookedRooms = totalRooms - availableRooms;
@@ -65,13 +63,11 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Dashboard Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="mt-2 text-gray-600">Manage your hotel rooms and monitor statistics</p>
         </div>
 
-        {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
             {
@@ -113,7 +109,6 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-wrap gap-4 mb-8">
           <button
             onClick={() => navigate('/addroom')}
@@ -131,7 +126,6 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {/* Rooms Grid */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-gray-900">Room Management</h2>
@@ -166,7 +160,7 @@ const AdminDashboard = () => {
                     <div className="flex items-center text-green-600">
                       <DollarSign className="h-4 w-4" />
                       <span className="font-bold">{room.price}</span>
-                      <span className="text-gray-500 text-sm">/night</span>
+                      <span className="text-gray-500 text-sm">/Month</span>
                     </div>
                   </div>
 

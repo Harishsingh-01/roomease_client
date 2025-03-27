@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { UserPlus, Mail, Lock, User, Shield, CheckCircle, AlertCircle } from "lucide-react";
-import API from "../utils/axiosInstance"; // Import the axios instance
+import API from "../utils/axiosInstance";
 
 
 const Register = () => {

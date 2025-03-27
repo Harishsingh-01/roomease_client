@@ -91,7 +91,7 @@ const Bookings = () => {
                     <span className="text-xl font-bold">
                       ₹{booking.roomId?.price || "N/A"}
                     </span>
-                    <span className="text-gray-500 ml-1">/night</span>
+                    <span className="text-gray-500 ml-1">/Month</span>
                   </div>
 
                   {/* Check-in */}

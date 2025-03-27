@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import roomImage from "./download.jpg";
 import backgroundImage from "./vojtech-bruzek-Yrxr3bsPdS0-unsplash.jpg";
-import API from "../utils/axiosInstance"; // Import the axios instance
+import API from "../utils/axiosInstance";
 
 
 import { Star, Wifi, Coffee, Utensils, Map, Phone, Clock, Search, ArrowRight, Users } from 'lucide-react';
@@ -157,7 +157,7 @@ const Home = () => {
             >
                 <div className="relative overflow-hidden h-64">
                 <img
-                  src={room.image || roomImage} 
+                  src={room.image } 
                   alt={room.name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
@@ -186,7 +186,7 @@ const Home = () => {
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-gray-600">{room.type}</span>
                     <span className="text-2xl font-bold text-green-600">₹{room.price}
-                      <span className="text-sm text-gray-500">/night</span>
+                      <span className="text-sm text-gray-500">/Month</span>
                     </span>
                   </div>
 

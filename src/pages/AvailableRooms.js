@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import roomImage from "./download.jpg";
 import { Hotel, DollarSign, Eye, Calendar, Check, Search } from "lucide-react";
-import API from "../utils/axiosInstance"; // Import the axios instance
+import API from "../utils/axiosInstance"; 
 
 
 const AvailableRooms = () => {
@@ -96,7 +96,7 @@ const AvailableRooms = () => {
                       <div className="flex items-center text-green-600">
                         <DollarSign className="h-5 w-5 mr-1" />
                         <span className="text-xl font-bold">₹{room.price}</span>
-                        <span className="text-sm text-gray-500 ml-1">/night</span>
+                        <span className="text-sm text-gray-500 ml-1">/Month</span>
                       </div>
                     </div>
 
