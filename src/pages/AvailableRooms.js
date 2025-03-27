@@ -73,7 +73,7 @@ const AvailableRooms = () => {
                   {/* Room Image */}
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
-                      src={room.imageUrl}
+                      src={room.mainImage}
                       alt={room.name}
                       className="w-full h-56 object-cover transform hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
