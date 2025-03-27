@@ -20,7 +20,7 @@ const UpdateRoom = () => {
 
  
         const response = await API.get(`/api/rooms/${roomId}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `${token}` },
         });
 
  
@@ -84,7 +84,7 @@ const UpdateRoom = () => {
         updatedData,
         {
           headers: { 
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token}`,
             'Content-Type': 'application/json'
           }
         }
