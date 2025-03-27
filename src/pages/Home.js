@@ -157,7 +157,7 @@ const Home = () => {
             >
                 <div className="relative overflow-hidden h-64">
                 <img
-                  src={room.image} 
+                  src={room.imageUrl} 
                   alt={room.name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />

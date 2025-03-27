@@ -75,7 +75,7 @@ const UpdateRoom = () => {
           ? room.amenities.split(',').map(item => item.trim()).filter(Boolean)
           : room.amenities,
         description: room.description || "",
-        image: room.imageUrl || "", // Match the backend field name
+        imageUrl: room.imageUrl || "", // Changed to match the form field name
         available: Boolean(room.available)
       };
 
@@ -250,7 +250,7 @@ const UpdateRoom = () => {
                 <input
                   type="text"
                   name="imageUrl"
-                  value={room.imageUrl || ""}
+                  value={room.imageUrl}
                   onChange={handleChange}
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                   placeholder="https://example.com/room-image.jpg"
