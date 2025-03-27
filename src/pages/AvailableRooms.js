@@ -72,11 +72,14 @@ const AvailableRooms = () => {
                   className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
                   {/* Room Image */}
-                  <div className="relative">
+                  <div className="relative overflow-hidden rounded-t-lg">
                     <img
-                      src={room.mainImage}
+                      src={room.mainImage || "https://via.placeholder.com/400x300?text=No+Image"}
                       alt={room.name}
-                      className="w-full h-56 object-cover"
+                      className="w-full h-56 object-cover transform hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
+                      }}
                     />
                     <div className="absolute top-4 right-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">

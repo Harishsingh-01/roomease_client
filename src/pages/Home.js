@@ -155,12 +155,15 @@ const Home = () => {
                 className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group"
                 style={{ animationDelay: `${index * 100}ms` }}
             >
-                <div className="relative overflow-hidden h-64">
+                <div className="relative group">
                 <img
-                  src={room.imageUrl} 
+                  src={room.mainImage || "https://via.placeholder.com/400x300?text=No+Image"}
                   alt={room.name}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                  />
+                  className="w-full h-64 object-cover rounded-t-lg"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
+                  }}
+                />
                   
                   <div className="absolute top-4 right-4 flex gap-2">
                     <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
