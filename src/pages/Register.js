@@ -52,6 +52,14 @@ const Register = () => {
         }
     };
 
+    const handleNameChange = (e) => {
+        const value = e.target.value;
+        // Only allow letters and spaces
+        if (value === '' || /^[A-Za-z\s]+$/.test(value)) {
+            setName(value);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-400 to-blue-500 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
             <div className="max-w-md w-full space-y-8 bg-white rounded-2xl shadow-xl p-8">
@@ -101,10 +109,10 @@ const Register = () => {
                                 <input
                                     type="text"
                                     value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    onChange={handleNameChange}
                                     required
                                     className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                                    placeholder="Enter your full name"
+                                    placeholder="Enter your full name (letters only)"
                                 />
                             </div>
                         </div>
