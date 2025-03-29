@@ -54,8 +54,14 @@ const BookRoom = () => {
         setTotalPrice(0);
         return;
       }
-      const Months = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-      setTotalPrice(Months * pricePerMonth);
+
+      // Calculate months difference
+      const monthsDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
+                        (endDate.getMonth() - startDate.getMonth());
+      
+      // If there's a partial month, round up to next month
+      const totalMonths = monthsDiff === 0 ? 1 : monthsDiff;
+      setTotalPrice(totalMonths * pricePerMonth);
     }
   }, [checkIn, checkOut, pricePerMonth]);
 
