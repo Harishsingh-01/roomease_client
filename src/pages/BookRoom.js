@@ -169,7 +169,7 @@ const BookRoom = () => {
                         <Calendar className="h-5 w-5 text-gray-400" />
                       </div>
                       <input
-                        type="date"
+                        type="month"
                         value={checkOut}
                         onChange={(e) => setCheckOut(e.target.value)}
                         required
