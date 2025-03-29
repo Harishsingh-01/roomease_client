@@ -97,7 +97,7 @@ const AvailableRooms = () => {
                       </div>
                       <div className="flex items-center text-green-600">
                       <span className="h-5 w-5 mr-1">₹</span>
-                      <span className="text-xl font-bold">₹{room.price}</span>
+                        <span className="text-xl font-bold">₹{room.price}</span>
                         <span className="text-sm text-gray-500 ml-1">/Month</span>
                       </div>
                     </div>
