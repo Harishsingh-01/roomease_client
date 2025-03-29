@@ -16,7 +16,6 @@ const UpdateRoom = () => {
     const fetchRoomDetails = async () => {
       try {
         const token = localStorage.getItem("token");
-        console.log(localStorage.getItem("token"));
 
  
         const response = await API.get(`/api/rooms/${roomId}`, {
