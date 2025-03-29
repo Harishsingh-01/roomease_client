@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Bookings from "./pages/Bookings";
 import AvailableRooms from "./pages/AvailableRooms";
-import Payment from "./pages/payment";
+// import Payment from "./pages/payment";
 import BookRoom from "./pages/BookRoom";
 import AddRoom from "./pages/AddRoom";
 import RoomDetails from "./pages/RoomDetails";
