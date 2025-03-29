@@ -63,7 +63,7 @@ const SuccessPage = () => {
             email: { status: 'processing', message: 'Sending confirmation email...' }
           }));
 
-          const userResponse = await API.get(`/api/users/${userId}`);
+          const userResponse = await API.get(`/api/rooms/users/${userId}`);
           
           if (userResponse.data?.email) {
             await API.post("/api/auth/send-booking-email", {
