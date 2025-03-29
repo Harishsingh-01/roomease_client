@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import roomImage from "./download.jpg";
-import backgroundImage from "./ral";
+import backgroundImage from "./ralph-ravi-kayden-768x512.jpg";
 import API from "../utils/axiosInstance";
 
 
