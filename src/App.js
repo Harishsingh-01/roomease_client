@@ -37,7 +37,7 @@ const App = () => {
         <Route path="/Bookroom/:roomId" element={<ProtectedRoute><BookRoom /></ProtectedRoute>} />
         <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
-        <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+        {/* <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} /> */}
         <Route path="/addroom" element={<AdminRoute><AddRoom /></AdminRoute>} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/update/:roomId" element={<UpdateRoom />} />
