@@ -149,7 +149,7 @@ const BookRoom = () => {
                         <Calendar className="h-5 w-5 text-gray-400" />
                       </div>
                       <input
-                        type="date"
+                        type="month"
                         value={checkIn}
                         onChange={(e) => setCheckIn(e.target.value)}
                         required
