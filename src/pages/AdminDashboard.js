@@ -162,7 +162,7 @@ const AdminDashboard = () => {
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-bold text-gray-900">{room.name}</h3>
                     <div className="flex items-center text-green-600">
-                      <DollarSign className="h-4 w-4" />
+                        <DollarSign className="h-5 w-5 mr-1" />
                       <span className="font-bold">{room.price}</span>
                       <span className="text-gray-500 text-sm">/Month</span>
                     </div>
