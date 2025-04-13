@@ -250,7 +250,7 @@ const UpdateRoom = () => {
                 <input
                   type="text"
                   name="mainImage"
-                  value={room.mainImage || ''}
+                  value={room.mainImage }
                   onChange={handleChange}
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                   placeholder="Main image URL"

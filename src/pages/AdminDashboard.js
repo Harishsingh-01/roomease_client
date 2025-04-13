@@ -140,12 +140,10 @@ const AdminDashboard = () => {
               <div key={room._id} className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <img
-                    src={room.mainImage || "https://via.placeholder.com/400x300?text=No+Image"}
+                    src={room.mainImage}
                     alt={room.name}
                     className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
-                    }}
+      
                   />
                   <div className="absolute top-4 right-4">
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${

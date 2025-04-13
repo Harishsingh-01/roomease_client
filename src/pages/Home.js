@@ -157,12 +157,10 @@ Get a Home Away From your Home
             >
                 <div className="relative group">
                 <img
-                  src={room.mainImage || "https://via.placeholder.com/400x300?text=No+Image"}
+                  src={room.mainImage}
                   alt={room.name}
                   className="w-full h-64 object-cover rounded-t-lg"
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
-                  }}
+                  
                 />
                   
                   <div className="absolute top-4 right-4 flex gap-2">

@@ -30,7 +30,6 @@ const RoomDetails = () => {
     'default': <Home className="h-5 w-5" />
   };
 
-  const defaultImage = "https://via.placeholder.com/400x300?text=No+Image+Available";
 
   const getAllImages = () => {
     if (!room) return [defaultImage];
@@ -202,9 +201,7 @@ const RoomDetails = () => {
                 src={getAllImages()[selectedImage]} 
                 alt={`${room.name} - View ${selectedImage + 1}`}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.src = defaultImage;
-                }}
+                
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -220,9 +217,7 @@ const RoomDetails = () => {
                     src={img} 
                     alt={`${room.name} - View ${index + 1}`}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.src = defaultImage;
-                    }}
+                    
                   />
                 </div>
               ))}
