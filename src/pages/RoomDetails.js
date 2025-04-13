@@ -32,6 +32,7 @@ const RoomDetails = () => {
 
 
   const getAllImages = () => {
+    if (!room) return [defaultImage];
     return [room.mainImage, ...(room.additionalImages || [])].filter(Boolean);
   };
 
