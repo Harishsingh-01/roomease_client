@@ -22,7 +22,8 @@ import { isTokenExpired } from "./utils/auth";
 import Review from './pages/Review';
 import ContactUs from './pages/ContactUs';
 import AdminContacts from './pages/AdminContacts';  
-
+import CancelBooking from './pages/CancelBooking';
+import AllRooms from './pages/AllRooms';
 const App = () => {
   return (
     <Router>
@@ -46,6 +47,8 @@ const App = () => {
         <Route path="/review/:bookingId" element={<Review />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/admin/contacts" element={<AdminContacts />} />
+        <Route path="/cancel-booking/:bookingId" element={<CancelBooking />} />
+        <Route path="/all-rooms" element={<AllRooms />} />
       </Routes>
     </Router>
   );

@@ -36,15 +36,25 @@ const Navbar = () => {
     <>
       {/* Navbar */}
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled 
-          ? "bg-white text-gray-800 shadow-lg" 
-          : "bg-blue-300 text-white"
+        userRole === "admin"
+          ? scrolled
+            ? "bg-slate-800 text-white shadow-lg"
+            : "bg-slate-900 text-white"
+          : scrolled
+            ? "bg-white text-blue-800 shadow-lg"
+            : "bg-blue-600 text-white"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <Hotel className={`w-8 h-8 ${scrolled ? "text-green-600" : "text-white"}`} />
+              <Hotel className={`w-8 h-8 ${
+                userRole === "admin"
+                  ? "text-emerald-400"
+                  : scrolled
+                    ? "text-blue-600"
+                    : "text-white"
+              }`} />
               <span className="text-xl font-bold">PGify</span>
             </Link>
 
@@ -58,7 +68,11 @@ const Navbar = () => {
                   <span className="flex items-center space-x-1">
                     <span>Home</span>
                   </span>
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 ${
+                    userRole === "admin"
+                      ? "bg-emerald-500"
+                      : "bg-blue-500"
+                  } transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></span>
                 </Link>
               )}
               
@@ -67,7 +81,11 @@ const Navbar = () => {
                   <Book className="w-4 h-4" />
                   <span>Available Rooms</span>
                 </span>
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                <span className={`absolute bottom-0 left-0 w-full h-0.5 ${
+                  userRole === "admin"
+                    ? "bg-emerald-500"
+                    : "bg-blue-500"
+                } transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></span>
               </Link>
 
               {isAuthenticated("user") && (
@@ -77,7 +95,11 @@ const Navbar = () => {
                       <Book className="w-4 h-4" />
                       <span>My Bookings</span>
                     </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <span className={`absolute bottom-0 left-0 w-full h-0.5 ${
+                      userRole === "admin"
+                        ? "bg-emerald-500"
+                        : "bg-blue-500"
+                    } transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></span>
                   </Link>
                   
                   <Link to="/contact" className="nav-link group relative">
@@ -85,7 +107,11 @@ const Navbar = () => {
                       <Mail className="w-4 h-4" />
                       <span>Contact Us</span>
                     </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <span className={`absolute bottom-0 left-0 w-full h-0.5 ${
+                      userRole === "admin"
+                        ? "bg-emerald-500"
+                        : "bg-blue-500"
+                    } transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></span>
                   </Link>
                 </>
               )}
@@ -97,35 +123,35 @@ const Navbar = () => {
                       <Mail className="w-4 h-4" />
                       <span>Contact Us</span>
                     </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                   </Link>
                   <Link to="/addroom" className="nav-link group relative">
                     <span className="flex items-center space-x-1">
                       <Plus className="w-4 h-4" />
                       <span>Add Room</span>
                     </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                   </Link>
                   <Link to="/admin/bookedrooms" className="nav-link group relative">
                     <span className="flex items-center space-x-1">
                       <Book className="w-4 h-4" />
                       <span>Booked Rooms</span>
                     </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                   </Link>
                   <Link to="/admin/usersdata" className="nav-link group relative">
                     <span className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
                       <span>Users</span>
                     </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                   </Link>
                   <Link to="/admin" className="nav-link group relative">
                     <span className="flex items-center space-x-1">
                       <LayoutDashboard className="w-4 h-4" />
                       <span>Dashboard</span>
                     </span>
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                   </Link>
                 </div>
               )}
@@ -136,9 +162,13 @@ const Navbar = () => {
                   <button 
                     onClick={logout} 
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      scrolled
-                        ? "bg-red-500 text-white hover:bg-red-600"
-                        : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm"
+                      userRole === "admin"
+                        ? scrolled
+                          ? "bg-rose-600 text-white hover:bg-rose-700"
+                          : "bg-rose-600 text-white hover:bg-rose-700"
+                        : scrolled
+                          ? "bg-red-500 text-white hover:bg-red-600"
+                          : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm"
                     }`}
                   >
                     Logout
@@ -148,9 +178,13 @@ const Navbar = () => {
                     <Link 
                       to="/login" 
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                        scrolled
-                          ? "bg-green-500 text-white hover:bg-green-600"
-                          : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm"
+                        userRole === "admin"
+                          ? scrolled
+                            ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                            : "bg-emerald-600 text-white hover:bg-emerald-700"
+                          : scrolled
+                            ? "bg-blue-500 text-white hover:bg-blue-600"
+                            : "bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm"
                       }`}
                     >
                       Login
@@ -158,9 +192,13 @@ const Navbar = () => {
                     <Link 
                       to="/register" 
                       className={`px-4 py-2 rounded-full text-sm font-medium ${
-                        scrolled
-                          ? "bg-green-500 text-white hover:bg-green-600"
-                          : "bg-white text-gray-800 hover:bg-gray-100"
+                        userRole === "admin"
+                          ? scrolled
+                            ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                            : "bg-emerald-600 text-white hover:bg-emerald-700"
+                          : scrolled
+                            ? "bg-blue-500 text-white hover:bg-blue-600"
+                            : "bg-white text-blue-600 hover:bg-blue-50"
                       } transition-all duration-300`}
                     >
                       Register
@@ -183,12 +221,20 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <div className={`lg:hidden transition-all duration-300 ease-in-out ${
           menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        } overflow-hidden bg-white shadow-lg`}>
+        } overflow-hidden ${
+          userRole === "admin"
+            ? "bg-slate-800 text-white"
+            : "bg-white text-blue-800"
+        } shadow-lg`}>
           <div className="px-4 py-2 space-y-2">
             {userRole !== "admin" && (
               <Link 
                 to="/" 
-                className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+                className={`block px-3 py-2 rounded-lg ${
+                  userRole === "admin"
+                    ? "text-white hover:bg-slate-700"
+                    : "text-blue-800 hover:bg-blue-50"
+                } transition-all duration-300`}
                 onClick={() => setMenuOpen(false)}
               >
                 Home
@@ -197,7 +243,11 @@ const Navbar = () => {
             
             <Link 
               to="/availableRooms" 
-              className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+              className={`block px-3 py-2 rounded-lg ${
+                userRole === "admin"
+                  ? "text-white hover:bg-slate-700"
+                  : "text-blue-800 hover:bg-blue-50"
+              } transition-all duration-300`}
               onClick={() => setMenuOpen(false)}
             >
               Available Rooms
@@ -207,7 +257,11 @@ const Navbar = () => {
               <>
                 <Link 
                   to="/bookings" 
-                  className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+                  className={`block px-3 py-2 rounded-lg ${
+                    userRole === "admin"
+                      ? "text-white hover:bg-slate-700"
+                      : "text-blue-800 hover:bg-blue-50"
+                  } transition-all duration-300`}
                   onClick={() => setMenuOpen(false)}
                 >
                   My Bookings
@@ -215,7 +269,11 @@ const Navbar = () => {
                 
                 <Link 
                   to="/contact" 
-                  className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+                  className={`block px-3 py-2 rounded-lg ${
+                    userRole === "admin"
+                      ? "text-white hover:bg-slate-700"
+                      : "text-blue-800 hover:bg-blue-50"
+                  } transition-all duration-300`}
                   onClick={() => setMenuOpen(false)}
                 >
                   <span className="flex items-center space-x-2">
@@ -230,28 +288,44 @@ const Navbar = () => {
               <>
                 <Link 
                   to="/addroom" 
-                  className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+                  className={`block px-3 py-2 rounded-lg ${
+                    userRole === "admin"
+                      ? "text-white hover:bg-slate-700"
+                      : "text-blue-800 hover:bg-blue-50"
+                  } transition-all duration-300`}
                   onClick={() => setMenuOpen(false)}
                 >
                   Add Room
                 </Link>
                 <Link 
                   to="/admin/bookedrooms" 
-                  className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+                  className={`block px-3 py-2 rounded-lg ${
+                    userRole === "admin"
+                      ? "text-white hover:bg-slate-700"
+                      : "text-blue-800 hover:bg-blue-50"
+                  } transition-all duration-300`}
                   onClick={() => setMenuOpen(false)}
                 >
                   Booked Rooms
                 </Link>
                 <Link 
                   to="/admin/usersdata" 
-                  className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+                  className={`block px-3 py-2 rounded-lg ${
+                    userRole === "admin"
+                      ? "text-white hover:bg-slate-700"
+                      : "text-blue-800 hover:bg-blue-50"
+                  } transition-all duration-300`}
                   onClick={() => setMenuOpen(false)}
                 >
                   Users
                 </Link>
                 <Link 
                   to="/admin" 
-                  className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-300"
+                  className={`block px-3 py-2 rounded-lg ${
+                    userRole === "admin"
+                      ? "text-white hover:bg-slate-700"
+                      : "text-blue-800 hover:bg-blue-50"
+                  } transition-all duration-300`}
                   onClick={() => setMenuOpen(false)}
                 >
                   <span className="flex items-center space-x-2">
@@ -262,35 +336,47 @@ const Navbar = () => {
               </>
             )}
 
-            <div className="pt-2 space-y-2 border-t border-gray-200">
-            {isAuthenticated() ? (
+            <div className="pt-2 space-y-2 border-t border-blue-200">
+              {isAuthenticated() ? (
                 <button 
                   onClick={() => {
                     logout();
                     setMenuOpen(false);
                   }}
-                  className="w-full px-3 py-2 rounded-lg text-white bg-red-500 hover:bg-red-600 transition-all duration-300"
+                  className={`w-full px-3 py-2 rounded-lg text-white ${
+                    userRole === "admin"
+                      ? "bg-rose-600 hover:bg-rose-700"
+                      : "bg-red-500 hover:bg-red-600"
+                  } transition-all duration-300`}
                 >
                   Logout
                 </button>
-            ) : (
-              <>
+              ) : (
+                <>
                   <Link 
                     to="/login" 
-                    className="block w-full px-3 py-2 rounded-lg text-white bg-green-500 hover:bg-green-600 transition-all duration-300"
+                    className={`block w-full px-3 py-2 rounded-lg text-white ${
+                      userRole === "admin"
+                        ? "bg-emerald-600 hover:bg-emerald-700"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    } transition-all duration-300`}
                     onClick={() => setMenuOpen(false)}
                   >
                     Login
                   </Link>
                   <Link 
                     to="/register" 
-                    className="block w-full px-3 py-2 rounded-lg text-white bg-green-500 hover:bg-green-600 transition-all duration-300"
+                    className={`block w-full px-3 py-2 rounded-lg text-white ${
+                      userRole === "admin"
+                        ? "bg-emerald-600 hover:bg-emerald-700"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    } transition-all duration-300`}
                     onClick={() => setMenuOpen(false)}
                   >
                     Register
                   </Link>
-              </>
-            )}
+                </>
+              )}
             </div>
           </div>
         </div>

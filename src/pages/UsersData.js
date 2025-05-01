@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Users, User, Mail, Shield, Trash2, AlertCircle, Loader } from "lucide-react";
+import { Users, User, Mail, Shield, Trash2, AlertCircle, Loader, CheckCircle2, XCircle } from "lucide-react";
 import API from "../utils/axiosInstance"; // Import the axios instance
 
 
@@ -18,25 +18,39 @@ const UsersData = () => {
           headers: { Authorization: `${token}` },
         });
         setUsers(response.data);
-      } catch (err) {
-        setError("Failed to load users");
+      } catch (error) {
+        setError(error.response?.data?.message || "Failed to fetch users");
       } finally {
         setLoading(false);
       }
     };
+
     fetchUsers();
   }, []);
 
-  const handleDelete = async (userId) => {
+  const handleDeleteUser = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
-    
     setDeleteLoading(userId);
     try {
-      await API.delete(`/api/admin/user-delete/${userId}`);
-      setUsers(users.filter(user => user._id !== userId));
-    } catch (err) {
-      console.error("Error deleting user:", err);
-      setError("Failed to delete user");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await API.delete(`/api/admin/user-delete/${userId}`, {
+        headers: { 
+          Authorization: `Bearer ${token}` 
+        }
+      });
+
+      if (response.status === 200) {
+        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+      } else {
+        throw new Error("Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Delete user error:", error);
+      setError(error.response?.data?.message || error.message || "Failed to delete user");
     } finally {
       setDeleteLoading(null);
     }
@@ -44,117 +58,125 @@ const UsersData = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader className="h-8 w-8 text-green-500 animate-spin mx-auto" />
-          <p className="mt-2 text-gray-600">Loading users data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Loading users data...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="p-4 bg-green-100 rounded-full">
-              <Users className="h-8 w-8 text-green-600" />
+    <div className="min-h-screen bg-slate-900 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+          {/* Header Section */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-emerald-900/50 rounded-lg">
+                <User className="h-6 w-6 text-emerald-400" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white">Users Management</h1>
+                <p className="text-sm text-slate-400">Manage and monitor user accounts</p>
+              </div>
+            </div>
+            <div className="text-sm text-slate-400">
+              Total Users: <span className="font-semibold text-emerald-400">{users.length}</span>
             </div>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">User Management</h2>
-          <p className="mt-2 text-gray-600">
-            Total Registered Users: <span className="font-semibold">{users.length}</span>
-          </p>
+
+          {error && (
+            <div className="mb-6 p-4 bg-rose-900/50 border border-rose-700 rounded-lg text-rose-300">
+              <AlertCircle className="h-5 w-5 inline-block mr-2" />
+              {error}
+            </div>
+          )}
+
+          {/* Users List */}
+          <div className="overflow-hidden rounded-xl border border-slate-700">
+            <table className="min-w-full divide-y divide-slate-700">
+              <thead className="bg-slate-800">
+                <tr>
+                  <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    User
+                  </th>
+                  <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    Role
+                  </th>
+                  <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-slate-800 divide-y divide-slate-700">
+                {users.map((user) => (
+                  <tr key={user._id} className="hover:bg-slate-700/50 transition-colors duration-300">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center">
+                            <User className="h-5 w-5 text-slate-400" />
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-white">{user.name}</div>
+                          <div className="text-sm text-slate-400">{user.email}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                        user.role === 'admin' 
+                          ? 'bg-violet-900/50 text-violet-300' 
+                          : 'bg-slate-700/50 text-slate-300'
+                      }`}>
+                        <Shield className="h-3 w-3 mr-1" />
+                        {user.role}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex items-center space-x-3">
+                        {user.role !== 'admin' && (
+                          <button
+                            onClick={() => handleDeleteUser(user._id)}
+                            disabled={deleteLoading === user._id}
+                            className={`inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium ${
+                              deleteLoading === user._id
+                                ? "bg-slate-700 text-slate-400 cursor-not-allowed"
+                                : "bg-rose-900/50 text-rose-300 hover:bg-rose-900/70"
+                            } transition-colors duration-300`}
+                          >
+                            {deleteLoading === user._id ? (
+                              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-rose-300"></div>
+                            ) : (
+                              <>
+                                <Trash2 className="h-4 w-4 mr-1" />
+                                Delete
+                              </>
+                            )}
+                          </button>
+                        )}
+                        {user.role === 'admin' && (
+                          <span className="text-xs text-slate-400">Admin accounts cannot be deleted</span>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {!loading && users.length === 0 && (
+            <div className="text-center py-12">
+              <User className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-slate-300">No users found</h3>
+              <p className="mt-1 text-sm text-slate-400">There are currently no users in the system.</p>
+            </div>
+          )}
         </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-center justify-center text-red-700">
-            <AlertCircle className="h-5 w-5 mr-2" />
-            {error}
-          </div>
-        )}
-
-        {/* Users Grid */}
-        {Array.isArray(users) && users.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-            <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No Users Found</h3>
-            <p className="mt-2 text-gray-500">There are no registered users in the system.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {users.map((user) => (
-              <div
-                key={user._id}
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
-              >
-                <div className="p-6">
-                  {/* User Role Badge */}
-                  <div className="flex justify-end mb-4">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                      user.role === "admin" 
-                        ? "bg-purple-100 text-purple-800" 
-                        : "bg-blue-100 text-blue-800"
-                    }`}>
-                      <Shield className="h-4 w-4 mr-1" />
-                      {user.role === "admin" ? "Administrator" : "User"}
-                    </span>
-                  </div>
-
-                  {/* User Details */}
-                  <div className="space-y-3">
-                    <div className="flex items-center">
-                      <User className="h-5 w-5 text-gray-400 mr-2" />
-                      <div>
-                        <p className="text-sm text-gray-500">Name</p>
-                        <p className="font-medium text-gray-900">{user.name}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center">
-                      <Mail className="h-5 w-5 text-gray-400 mr-2" />
-                      <div>
-                        <p className="text-sm text-gray-500">Email</p>
-                        <p className="font-medium text-gray-900">{user.email}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Delete Button */}
-                  {user.role !== "admin" && (
-                    <button
-                      onClick={() => handleDelete(user._id)}
-                      disabled={deleteLoading === user._id}
-                      className={`mt-6 w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
-                        ${deleteLoading === user._id
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        } transition-colors duration-300`}
-                    >
-                      {deleteLoading === user._id ? (
-                        <Loader className="animate-spin h-5 w-5" />
-                      ) : (
-                        <>
-                          <Trash2 className="h-5 w-5 mr-2" />
-                          Delete User
-                        </>
-                      )}
-                    </button>
-                  )}
-
-                  {user.role === "admin" && (
-                    <div className="mt-6 text-center p-2 bg-gray-50 rounded-md">
-                      <p className="text-sm text-gray-600">Administrator account cannot be deleted</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

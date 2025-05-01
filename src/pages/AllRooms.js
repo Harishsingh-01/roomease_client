@@ -4,10 +4,11 @@ import API from "../utils/axiosInstance";
 import { 
   Search, Filter, ArrowUp, ArrowDown, 
   DollarSign, Wifi, Coffee, Utensils,
-  ChevronRight, ChevronLeft, Star
+  ChevronRight, ChevronLeft, Star,
+  Calendar, CheckCircle2, XCircle
 } from 'lucide-react';
 
-const AvailableRooms = () => {
+const AllRooms = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,11 +17,12 @@ const AvailableRooms = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [roomsPerPage] = useState(6);
   const [selectedType, setSelectedType] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
 
   useEffect(() => {
     setLoading(true);
-    API.get(`/api/rooms`, { withCredentials: true })
+    API.get(`/api/rooms/`)
       .then((res) => {
         setRooms(res.data);
         setLoading(false);
@@ -31,7 +33,7 @@ const AvailableRooms = () => {
       });
   }, []);
 
-  // Filter rooms based on search term, type, and price range
+  // Filter rooms based on search term, type, status, and price range
   const filteredRooms = rooms.filter(room => {
     const matchesSearch = 
       room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -39,10 +41,14 @@ const AvailableRooms = () => {
     
     const matchesType = selectedType === "all" || room.type === selectedType;
     
+    const matchesStatus = selectedStatus === "all" || 
+      (selectedStatus === "available" && room.available) ||
+      (selectedStatus === "booked" && !room.available);
+    
     const matchesPrice = 
       room.price >= priceRange.min && room.price <= priceRange.max;
     
-    return matchesSearch && matchesType && matchesPrice;
+    return matchesSearch && matchesType && matchesStatus && matchesPrice;
   });
 
   // Sort rooms
@@ -53,6 +59,10 @@ const AvailableRooms = () => {
       return sortOrder === "asc" 
         ? a.name.localeCompare(b.name) 
         : b.name.localeCompare(a.name);
+    } else if (sortBy === "status") {
+      return sortOrder === "asc" 
+        ? (a.available ? -1 : 1) 
+        : (a.available ? 1 : -1);
     }
     return 0;
   });
@@ -80,23 +90,23 @@ const AvailableRooms = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Available Rooms
+            All Rooms
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Find your perfect stay from our wide selection of rooms
+            Browse through our complete collection of rooms
           </p>
         </div>
 
         {/* Search and Filter Section */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search rooms..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              <input
+                type="text"
+                placeholder="Search rooms..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
@@ -116,6 +126,19 @@ const AvailableRooms = () => {
               </select>
             </div>
 
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
+              >
+                <option value="all">All Status</option>
+                <option value="available">Available</option>
+                <option value="booked">Booked</option>
+              </select>
+            </div>
+
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <label className="block text-sm text-gray-600 mb-1">Price Range</label>
@@ -126,7 +149,7 @@ const AvailableRooms = () => {
                     onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
                     className="w-24 px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Min"
-            />
+                  />
                   <span className="text-gray-500">-</span>
                   <input
                     type="number"
@@ -163,6 +186,15 @@ const AvailableRooms = () => {
                 sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
               )}
             </button>
+            <button
+              onClick={() => handleSort("status")}
+              className="flex items-center gap-1 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+            >
+              Status
+              {sortBy === "status" && (
+                sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+              )}
+            </button>
           </div>
         </div>
 
@@ -174,82 +206,72 @@ const AvailableRooms = () => {
         ) : currentRooms.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-xl text-gray-700">No rooms found matching your criteria.</p>
-            </div>
-          ) : (
+          </div>
+        ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {currentRooms.map((room) => (
-                <div
-                  key={room._id}
-                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group"
-                >
-                {/* Image Section with Overlay */}
-                <div className="relative h-64 overflow-hidden">
-                    <img
-                      src={room.mainImage}
-                      alt={room.name}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+              <div
+                key={room._id}
+                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+              >
+                <div className="relative">
+                  <img
+                    src={room.mainImage}
+                    alt={room.name}
+                    className="w-full h-64 object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      
-                  {/* Status Badge */}
-                    <div className="absolute top-4 right-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      room.available 
-                        ? "bg-green-500 text-white" 
-                        : "bg-red-500 text-white"
-                    }`}>
-                      {room.available ? "Available" : "Booked"}
-                    </span>
-                  </div>
-
-                  {/* Room Type */}
-                  <div className="absolute bottom-4 left-4">
-                    <span className="px-3 py-1 rounded-full text-sm font-medium bg-white/90 text-gray-800">
-                      {room.type}
+                  <div className="absolute top-4 right-4">
+                    {room.available ? (
+                      <span className="px-3 py-1 rounded-full text-sm font-semibold bg-green-500 text-white flex items-center gap-1">
+                        <CheckCircle2 className="w-4 h-4" />
+                        Available
                       </span>
+                    ) : (
+                      <span className="px-3 py-1 rounded-full text-sm font-semibold bg-red-500 text-white flex items-center gap-1">
+                        <XCircle className="w-4 h-4" />
+                        Booked
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-xl font-bold text-gray-800">{room.name}</h3>
+                    <div className="flex items-center text-green-600">
+                      <DollarSign className="w-5 h-5 mr-1" />
+                      <span className="text-xl font-bold">₹{room.price}</span>
+                      <span className="text-sm text-gray-500 ml-1">/Month</span>
                     </div>
                   </div>
 
-                {/* Content Section */}
-                  <div className="p-6">
-                  {/* Title and Price */}
-                    <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors duration-300">{room.name}</h3>
-                      <div className="flex items-center text-green-600">
-                      <DollarSign className="w-5 h-5 mr-1" />
-                        <span className="text-xl font-bold">₹{room.price}</span>
-                        <span className="text-sm text-gray-500 ml-1">/Month</span>
-                      </div>
-                    </div>
+                  <p className="text-gray-600 mb-4">{room.type}</p>
 
-                    {/* Amenities */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {room.amenities && room.amenities.map((amenity, index) => (
-                            <span
-                              key={index}
+                      <span
+                        key={index}
                         className="inline-flex items-center gap-1 bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-sm"
-                            >
+                      >
                         {amenity === 'Wifi' && <Wifi className="w-4 h-4" />}
                         {amenity === 'Coffee' && <Coffee className="w-4 h-4" />}
                         {amenity === 'Restaurant' && <Utensils className="w-4 h-4" />}
-                              {amenity}
-                            </span>
-                          ))}
-                        </div>
-
-                    {/* View Details Button */}
-                    <Link
-                      to={`/room/${room._id}`}
-                    className="block w-full text-center bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-300 relative overflow-hidden group/button"
-                    >
-                    <span className="relative z-10">View Details</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-green-500 opacity-0 group-hover/button:opacity-100 transition-opacity duration-300" />
-                    </Link>
+                        {amenity}
+                      </span>
+                    ))}
                   </div>
+
+                  <Link
+                    to={`/room/${room._id}`}
+                    className="block w-full text-center bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-300"
+                  >
+                    View Details
+                  </Link>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Pagination */}
         {totalPages > 1 && (
@@ -281,11 +303,11 @@ const AvailableRooms = () => {
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-        </div>
+          </div>
         )}
       </div>
     </div>
   );
 };
 
-export default AvailableRooms;
+export default AllRooms; 

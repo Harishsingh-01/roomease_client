@@ -1,40 +1,35 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Hotel, DollarSign, Type, List, FileText, Image, Loader, AlertCircle } from "lucide-react";
+import { Image, Plus, X } from "lucide-react";
 import API from "../utils/axiosInstance";
 
 const AddRoom = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  
-  const [room, setRoom] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     type: "",
     price: "",
-    amenities: "",
     description: "",
-    mainImage: "", // Main image URL
-    additionalImages: ["", "", ""], // Array for 3 additional images
-    available: true
+    amenities: "",
+    mainImage: "",
+    additionalImages: ["", "", ""],
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setRoom(prevRoom => ({
-      ...prevRoom,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle additional image changes
-  const handleImageChange = (index, value) => {
-    setRoom(prevRoom => {
-      const newAdditionalImages = [...prevRoom.additionalImages];
+  const handleAdditionalImageChange = (index, value) => {
+    setFormData((prev) => {
+      const newAdditionalImages = [...prev.additionalImages];
       newAdditionalImages[index] = value;
       return {
-        ...prevRoom,
-        additionalImages: newAdditionalImages
+        ...prev,
+        additionalImages: newAdditionalImages,
       };
     });
   };
@@ -46,240 +41,182 @@ const AddRoom = () => {
 
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      // Validate required fields
-      if (!room.name || !room.type || !room.price || !room.mainImage) {
-        throw new Error("Name, type, price, and main image are required");
-      }
-
-      // Format the data
-      const roomData = {
-        name: room.name,
-        type: room.type,
-        price: Number(room.price),
-        amenities: room.amenities.split(',').map(item => item.trim()).filter(Boolean),
-        description: room.description,
-        mainImage: room.mainImage,
-        additionalImages: room.additionalImages.filter(Boolean), // Remove empty strings
-        available: room.available
+      const dataToSend = {
+        ...formData,
+        amenities: formData.amenities.split(",").map(item => item.trim()),
+        additionalImages: formData.additionalImages.filter(url => url.trim() !== ""),
       };
 
-      const response = await API.post("/api/admin/addrooms", roomData, {
-        headers: { Authorization: `${token}` }
+      await API.post("/api/admin/addroom", dataToSend, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
       });
 
-      if (response.data) {
-        alert("Room added successfully!");
-        navigate("/admin");
-      }
-    } catch (err) {
-      setError(err.message || "Failed to add room");
+      navigate("/admin");
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to add room");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center">
-            <Hotel className="h-8 w-8 text-green-500 mr-3" />
-            <h1 className="text-2xl font-bold text-gray-900">Add New Room</h1>
+    <div className="min-h-screen bg-slate-900 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold text-white">Add New Room</h1>
+            <button
+              onClick={() => navigate("/admin")}
+              className="text-slate-400 hover:text-white transition-colors duration-300"
+            >
+              <X className="h-6 w-6" />
+            </button>
           </div>
-        </div>
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-center text-red-700">
-            <AlertCircle className="h-5 w-5 mr-2" />
-            {error}
-          </div>
-        )}
+          {error && (
+            <div className="mb-6 p-4 bg-rose-900/50 border border-rose-700 rounded-lg text-rose-300">
+              {error}
+            </div>
+          )}
 
-        <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Room Name
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Hotel className="h-5 w-5 text-gray-400" />
-                </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Room Name
+                </label>
                 <input
                   type="text"
                   name="name"
-                  id="name"
-                  value={room.name}
+                  value={formData.name}
                   onChange={handleChange}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="Deluxe Suite"
+                  className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-300"
+                  placeholder="Enter room name"
                 />
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-                Room Type
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <List className="h-5 w-5 text-gray-400" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Room Type
+                </label>
                 <input
                   type="text"
                   name="type"
-                  id="type"
-                  value={room.type}
+                  value={formData.type}
                   onChange={handleChange}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="Single, Double, Suite"
+                  className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-300"
+                  placeholder="Enter room type"
                 />
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                Price per Month
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <DollarSign className="h-5 w-5 text-gray-400" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Price per Month
+                </label>
                 <input
                   type="number"
                   name="price"
-                  id="price"
-                  value={room.price}
+                  value={formData.price}
                   onChange={handleChange}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="1000"
+                  className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-300"
+                  placeholder="Enter price"
                 />
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="amenities" className="block text-sm font-medium text-gray-700">
-                Amenities
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Type className="h-5 w-5 text-gray-400" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Amenities (comma separated)
+                </label>
                 <input
                   type="text"
                   name="amenities"
-                  id="amenities"
-                  value={room.amenities}
+                  value={formData.amenities}
                   onChange={handleChange}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="WiFi, TV, AC (comma separated)"
+                  className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-300"
+                  placeholder="WiFi, TV, AC, etc."
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-slate-300 mb-2">
                 Description
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute top-3 left-3 pointer-events-none">
-                  <FileText className="h-5 w-5 text-gray-400" />
-                </div>
-                <textarea
-                  name="description"
-                  id="description"
-                  value={room.description}
-                  onChange={handleChange}
-                  required
-                  rows="4"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="Enter detailed room description"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">
-                Main Image URL (Required)
-              </label>
-              <div className="relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Image className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  name="mainImage"
-                  value={room.mainImage}
-                  onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                  placeholder="Main image URL (required)"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">
-                Additional Images (Optional)
-              </label>
-              <div className="space-y-2">
-                {[0, 1, 2].map((index) => (
-                  <div key={index} className="relative rounded-md shadow-sm">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Image className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <input
-                      type="text"
-                      value={room.additionalImages[index]}
-                      onChange={(e) => handleImageChange(index, e.target.value)}
-                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                      placeholder={`Additional image URL ${index + 1}`}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="available" className="block text-sm font-medium text-gray-700">
-                Availability Status
-              </label>
-              <select
-                name="available"
-                id="available"
-                value={room.available}
+              <textarea
+                name="description"
+                value={formData.description}
                 onChange={handleChange}
-                className="mt-1 block w-full pl-3 pr-10 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-              >
-                <option value="true">Available</option>
-                <option value="false">Booked</option>
-              </select>
+                required
+                rows="4"
+                className="w-full px-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-300"
+                placeholder="Enter room description"
+              />
             </div>
 
-            <div className="pt-4">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Main Image URL (Required)
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Image className="h-5 w-5 text-slate-400" />
+                  </div>
+                  <input
+                    type="url"
+                    name="mainImage"
+                    value={formData.mainImage}
+                    onChange={handleChange}
+                    required
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-300"
+                    placeholder="Enter main image URL"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Additional Image URLs (Optional)
+                </label>
+                <div className="space-y-3">
+                  {[0, 1, 2].map((index) => (
+                    <div key={index} className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Image className="h-5 w-5 text-slate-400" />
+                      </div>
+                      <input
+                        type="url"
+                        value={formData.additionalImages[index]}
+                        onChange={(e) => handleAdditionalImageChange(index, e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors duration-300"
+                        placeholder={`Additional image URL ${index + 1}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white 
-                  ${loading ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'} 
-                  transition-colors`}
+                className="inline-flex items-center px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-300"
               >
                 {loading ? (
-                  <>
-                    <Loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
-                    Adding Room...
-                  </>
+                  "Adding Room..."
                 ) : (
-                  'Add Room'
+                  <>
+                    <Plus className="h-5 w-5 mr-2" />
+                    Add Room
+                  </>
                 )}
               </button>
             </div>
@@ -291,3 +228,4 @@ const AddRoom = () => {
 };
 
 export default AddRoom;
+

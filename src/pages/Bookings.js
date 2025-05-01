@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import API from "../utils/axiosInstance";
 import { Calendar, Clock, DollarSign, Hotel, CheckCircle, XCircle, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 const Bookings = () => {
@@ -137,13 +137,27 @@ const Bookings = () => {
                       {booking.status || "N/A"}
                     </span>
                     
-                    <button
-                      onClick={() => navigate(`/review/${booking._id}`)}
-                      className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                    >
-                      <Star className="h-4 w-4 mr-2" />
-                      Add Review & Rating
-                    </button>
+                    <div className="flex space-x-3">
+                      {booking.status === 'booked' && (
+                        <Link
+                          to={`/cancel-booking/${booking._id}`}
+                          className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        >
+                          <XCircle className="h-4 w-4 mr-2" />
+                          Cancel Booking
+                        </Link>
+                      )}
+                      
+                      {booking.status !== 'cancelled' && (
+                        <button
+                          onClick={() => navigate(`/review/${booking._id}`)}
+                          className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                          <Star className="h-4 w-4 mr-2" />
+                          Add Review
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
