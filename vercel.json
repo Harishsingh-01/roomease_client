@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/mysitemap.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml"
+        }
+      ]
+    }
+  ]
+} 
