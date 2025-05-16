@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route,Navigate,useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -24,31 +24,40 @@ import ContactUs from './pages/ContactUs';
 import AdminContacts from './pages/AdminContacts';  
 import CancelBooking from './pages/CancelBooking';
 import AllRooms from './pages/AllRooms';
+import NotFound from './pages/NotFound';
+
 const App = () => {
   return (
     <Router>
       <Navbar />
       <AuthChecker />
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/availableRooms" element={<AvailableRooms />} />
         <Route path="/room/:roomId" element={<RoomDetails />} />
+        <Route path="/all-rooms" element={<AllRooms />} />
+        
+        {/* Protected User Routes */}
         <Route path="/Bookroom/:roomId" element={<ProtectedRoute><BookRoom /></ProtectedRoute>} />
         <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
-        {/* <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} /> */}
+        <Route path="/review/:bookingId" element={<ProtectedRoute><Review /></ProtectedRoute>} />
+        <Route path="/contact" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
+        <Route path="/cancel-booking/:bookingId" element={<ProtectedRoute><CancelBooking /></ProtectedRoute>} />
+        
+        {/* Protected Admin Routes */}
+        <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         <Route path="/addroom" element={<AdminRoute><AddRoom /></AdminRoute>} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/update/:roomId" element={<UpdateRoom />} />
-        <Route path="/admin/bookedrooms" element={<AdminBookedRooms />} />
-        <Route path="/admin/Usersdata" element={<UsersData />} />
-        <Route path="/review/:bookingId" element={<Review />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/admin/contacts" element={<AdminContacts />} />
-        <Route path="/cancel-booking/:bookingId" element={<CancelBooking />} />
-        <Route path="/all-rooms" element={<AllRooms />} />
+        <Route path="/admin/update/:roomId" element={<AdminRoute><UpdateRoom /></AdminRoute>} />
+        <Route path="/admin/bookedrooms" element={<AdminRoute><AdminBookedRooms /></AdminRoute>} />
+        <Route path="/admin/Usersdata" element={<AdminRoute><UsersData /></AdminRoute>} />
+        <Route path="/admin/contacts" element={<AdminRoute><AdminContacts /></AdminRoute>} />
+
+        {/* 404 Route - Must be last */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
@@ -56,11 +65,11 @@ const App = () => {
 
 const AuthChecker = () => {
   const location = useLocation();
-  const token=localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (token && isTokenExpired()) {
-      alert("token expired");
+      alert("Session expired. Please login again.");
       localStorage.removeItem("token");
       window.location.href = "/login";
     }
@@ -70,11 +79,19 @@ const AuthChecker = () => {
 };
 
 const ProtectedRoute = ({ children }) => {
-  return isAuthenticated() ? children : <Navigate to="/login" />;
+  const isAuth = isAuthenticated();
+  if (!isAuth) {
+    return <Navigate to="/login" state={{ from: window.location.pathname }} replace />;
+  }
+  return children;
 };
 
 const AdminRoute = ({ children }) => {
-  return isAuthenticated("admin") ? children : <Navigate to="/login" />;
+  const isAdmin = isAuthenticated("admin");
+  if (!isAdmin) {
+    return <Navigate to="/login" state={{ from: window.location.pathname }} replace />;
+  }
+  return children;
 };
 
 export default App;

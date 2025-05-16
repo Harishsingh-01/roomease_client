@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Mail, Lock, LogIn, AlertCircle } from "lucide-react";
 import API from "../utils/axiosInstance"; // Import the axios instance
@@ -12,6 +12,10 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the redirect path from location state or default to home
+  const from = location.state?.from || "/";
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,7 +30,8 @@ const Login = () => {
       if (userRole === "admin") {
         navigate("/admin");
       } else {
-        navigate("/");
+        // Redirect to the page they were trying to access, or home
+        navigate(from);
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Invalid credentials. Please try again.");
