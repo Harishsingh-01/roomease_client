@@ -1,24 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Pages -->
-  <url>
-    <loc>https://pgify.vercel.app/</loc>
-  </url>
-  <url>
-    <loc>https://pgify.vercel.app/availableRooms</loc>
-  </url>
-  <url>
-    <loc>https://pgify.vercel.app/all-rooms</loc>
-  </url>
-  <url>
-    <loc>https://pgify.vercel.app/contact</loc>
-  </url>
-
-  <!-- Authentication Pages -->
-  <url>
-    <loc>https://pgify.vercel.app/login</loc>
-  </url>
-  <url>
-    <loc>https://pgify.vercel.app/register</loc>
-  </url>
-</urlset> 
+    <!--  Main Pages  -->
+    <url>
+        <loc>https://pgify.vercel.app/</loc>
+    </url>
+    <url>
+        <loc>https://pgify.vercel.app/availableRooms</loc>
+    </url>
+    <url>
+        <loc>https://pgify.vercel.app/all-rooms</loc>
+    </url>
+    <url>
+        <loc>https://pgify.vercel.app/contact</loc>
+    </url>
+    <!--  Authentication Pages  -->
+    <url>
+        <loc>https://pgify.vercel.app/login</loc>
+    </url>
+    <url>
+        <loc>https://pgify.vercel.app/register</loc>
+    </url>
+</urlset>
