@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -29,6 +30,7 @@ import NotFound from './pages/NotFound';
 const App = () => {
   return (
     <Router>
+      <Toaster />
       <Navbar />
       <AuthChecker />
       <Routes>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Image, Plus, X } from "lucide-react";
 import API from "../utils/axiosInstance";
+import toast from "react-hot-toast";
 
 const AddRoom = () => {
   const navigate = useNavigate();
@@ -54,9 +55,35 @@ const AddRoom = () => {
         },
       });
 
-      navigate("/admin");
+      // Show success toast
+      toast.success('Room added successfully!', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#10B981',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+
+      // Navigate after a short delay to show the toast
+      setTimeout(() => {
+        navigate("/admin");
+      }, 1000);
     } catch (error) {
       setError(error.response?.data?.message || "Failed to add room");
+      // Show error toast
+      toast.error(error.response?.data?.message || "Failed to add room", {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#EF4444',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
     } finally {
       setLoading(false);
     }

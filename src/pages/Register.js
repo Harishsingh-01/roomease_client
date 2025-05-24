@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { UserPlus, Mail, Lock, User, Shield, CheckCircle, AlertCircle } from "lucide-react";
+import { UserPlus, Mail, Lock, User, Shield } from "lucide-react";
 import API from "../utils/axiosInstance";
-
+import toast from "react-hot-toast";
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -11,28 +10,26 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [otp, setOtp] = useState("");
     const [otpSent, setOtpSent] = useState(false);
-    const [response, setResponse] = useState({ type: "", message: "" });
     const [loading, setLoading] = useState(false);
-    
     const navigate = useNavigate();
 
     const handleSendOtp = async () => {
         if (!email) {
-            setResponse({ type: "error", message: "Please enter your email address (Check SPAM mail also)" });
+            toast.error("Please enter your email address (Check SPAM mail also)", { position: "top-center" });
             return;
         }
         setLoading(true);
         try {
             await API.post("/api/auth/send-otp", { email });
             setOtpSent(true);
-            setResponse({ type: "success", message: "OTP sent to your email!" });
+            toast.success("OTP sent to your email!", { position: "top-center" });
         } catch (error) {
-            setResponse({ 
-                type: "error", 
-                message: error.response?.data?.message === "Email already registered" 
+            toast.error(
+                error.response?.data?.message === "Email already registered"
                     ? "Email already registered! Try logging in." 
-                    : "Failed to send OTP. Try again!"
-            });
+                    : "Failed to send OTP. Try again!",
+                { position: "top-center" }
+            );
         } finally {
             setLoading(false);
         }
@@ -43,10 +40,10 @@ const Register = () => {
         setLoading(true);
         try {
             await API.post("/api/auth/verify-otp", { email, otp, name, password });
-            setResponse({ type: "success", message: "Registration successful! Redirecting..." });
-            setTimeout(() => navigate("/login"), 3000);
+            toast.success("Registration successful! Redirecting...", { position: "top-center" });
+            setTimeout(() => navigate("/login"), 2000);
         } catch (error) {
-            setResponse({ type: "error", message: "Invalid or expired OTP. Try again!" });
+            toast.error("Invalid or expired OTP. Try again!", { position: "top-center" });
         } finally {
             setLoading(false);
         }
@@ -54,168 +51,129 @@ const Register = () => {
 
     const handleNameChange = (e) => {
         const value = e.target.value;
-        // Only allow letters and spaces
         if (value === '' || /^[A-Za-z\s]+$/.test(value)) {
             setName(value);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-400 to-blue-500 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-            <div className="max-w-md w-full space-y-8 bg-white rounded-2xl shadow-xl p-8">
-                {/* Header */}
-                <div className="text-center">
-                    <div className="flex justify-center mb-4">
-                        <div className="p-4 bg-green-100 rounded-full">
-                            <UserPlus className="h-8 w-8 text-green-600" />
+        <div className="min-h-screen flex items-center justify-center bg-[#10bdbd] px-2 py-8">
+            <div className="w-full max-w-4xl bg-[#18191A] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
+                {/* Left Side - Image & Text */}
+                <div className="md:w-1/2 w-full relative flex flex-col justify-between bg-black/60" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+                    <div className="p-8">
+                        <div className="flex items-center mb-8">
+                            <img src="/mainlogo.png" alt="Logo" className="h-8 w-8 mr-2" />
+                            <span className="text-white text-2xl font-bold italic tracking-wide">PGify</span>
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">Start your journey</h2>
+                        <p className="text-white/80 text-lg mb-8">Join us and book your perfect stay, anywhere.</p>
+                        <div className="flex space-x-4 mt-8">
+                            <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-twitter"></i></a>
+                            <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-facebook"></i></a>
+                            <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-instagram"></i></a>
                         </div>
                     </div>
-                    <h2 className="text-3xl font-extrabold text-gray-900">Create Account</h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        Join us and start booking your perfect stay
-                    </p>
-                </div>
-
-                {/* Response Message */}
-                {response.message && (
-                    <div className={`flex items-center p-4 rounded-lg ${
-                        response.type === "success" 
-                            ? "bg-green-50 border border-green-200" 
-                            : "bg-red-50 border border-red-200"
-                    }`}>
-                        {response.type === "success" ? (
-                            <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                        ) : (
-                            <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
-                        )}
-                        <p className={`text-sm ${
-                            response.type === "success" ? "text-green-700" : "text-red-700"
-                        }`}>
-                            {response.message}
-                        </p>
+                    <div className="text-center pb-4">
+                        <span className="bg-white px-4 py-1 rounded-full text-xs text-[#18191A] font-semibold shadow">presented by PGify</span>
                     </div>
-                )}
-
-                {/* Form */}
-                <form onSubmit={handleRegister} className="mt-8 space-y-6">
-                    <div className="space-y-4">
-                        {/* Name Input */}
+                </div>
+                {/* Right Side - Register Form */}
+                <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-8 bg-[#18191A]">
+                    <div className="w-full max-w-sm">
+                        <div className="flex flex-col items-center mb-6">
+                            <img src="/mainlogo.png" alt="Logo" className="h-10 w-10 mb-2" />
+                            <span className="text-white text-2xl font-bold italic tracking-wide mb-2">PGify</span>
+                            <div className="flex space-x-3 mb-2">
+                                <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-facebook-f"></i></button>
+                                <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-google"></i></button>
+                                <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-linkedin-in"></i></button>
+                            </div>
+                            <span className="text-white/60 text-xs mb-2">or use your email account</span>
+                    </div>
+                        <form onSubmit={handleRegister} className="space-y-5">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <label className="block text-white/80 text-sm mb-1">Full Name</label>
                             <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <User className="h-5 w-5 text-gray-400" />
-                                </div>
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"><User className="h-5 w-5" /></span>
                                 <input
                                     type="text"
                                     value={name}
                                     onChange={handleNameChange}
                                     required
-                                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                                        className="w-full pl-10 pr-3 py-3 rounded-lg bg-[#232526] text-white placeholder-white/40 border border-white/10 focus:ring-2 focus:ring-[#10bdbd] focus:outline-none transition"
                                     placeholder="Enter your full name (letters only)"
                                 />
                             </div>
                         </div>
-
-                        {/* Email Input */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                <label className="block text-white/80 text-sm mb-1">Email</label>
                             <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Mail className="h-5 w-5 text-gray-400" />
-                                </div>
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"><Mail className="h-5 w-5" /></span>
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                                        className="w-full pl-10 pr-3 py-3 rounded-lg bg-[#232526] text-white placeholder-white/40 border border-white/10 focus:ring-2 focus:ring-[#10bdbd] focus:outline-none transition"
                                     placeholder="Enter your email"
                                 />
                             </div>
                         </div>
-
                     {!otpSent ? (
                             <button
                                 type="button"
                                 onClick={handleSendOtp}
                                 disabled={loading}
-                                className={`w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white ${
-                                    loading 
-                                        ? "bg-gray-400 cursor-not-allowed" 
-                                        : "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                } transition-colors duration-300`}
-                            >
-                                {loading ? (
-                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                                ) : (
-                                    "Send OTP"
-                                )}
+                                    className={`w-full flex justify-center items-center py-3 px-4 rounded-lg text-white font-semibold text-lg transition-all duration-300 ${loading ? "bg-[#10bdbd]/60 cursor-not-allowed" : "bg-[#10bdbd] hover:bg-[#0ea5a5]"}`}
+                                >
+                                    {loading ? "Sending OTP..." : "Send OTP"}
                             </button>
                     ) : (
                         <>
-                                {/* OTP Input */}
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">OTP</label>
+                                        <label className="block text-white/80 text-sm mb-1">OTP</label>
                                     <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <Shield className="h-5 w-5 text-gray-400" />
-                                        </div>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"><Shield className="h-5 w-5" /></span>
                                         <input
                                             type="text"
                                             value={otp}
                                             onChange={(e) => setOtp(e.target.value)}
                                             required
-                                            className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                                                className="w-full pl-10 pr-3 py-3 rounded-lg bg-[#232526] text-white placeholder-white/40 border border-white/10 focus:ring-2 focus:ring-[#10bdbd] focus:outline-none transition"
                                             placeholder="Enter OTP"
                                         />
                                     </div>
                                 </div>
-
-                                {/* Password Input */}
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                        <label className="block text-white/80 text-sm mb-1">Password</label>
                                     <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <Lock className="h-5 w-5 text-gray-400" />
-                                        </div>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"><Lock className="h-5 w-5" /></span>
                                         <input
                                             type="password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
-                                            className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                                                className="w-full pl-10 pr-3 py-3 rounded-lg bg-[#232526] text-white placeholder-white/40 border border-white/10 focus:ring-2 focus:ring-[#10bdbd] focus:outline-none transition"
                                             placeholder="Create a password"
                                         />
                                     </div>
                                 </div>
-
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className={`w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white ${
-                                        loading 
-                                            ? "bg-gray-400 cursor-not-allowed" 
-                                            : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                                    } transition-colors duration-300`}
-                                >
-                                    {loading ? (
-                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                                    ) : (
-                                        "Register"
-                                    )}
+                                        className={`w-full flex justify-center items-center py-3 px-4 rounded-lg text-white font-semibold text-lg transition-all duration-300 ${loading ? "bg-[#10bdbd]/60 cursor-not-allowed" : "bg-[#10bdbd] hover:bg-[#0ea5a5]"}`}
+                                    >
+                                        {loading ? "Registering..." : "Register"}
                                 </button>
                         </>
                     )}
+                            <div className="text-center text-sm mt-4">
+                                <span className="text-white/60">Already have an account? </span>
+                                <Link to="/login" className="text-[#10bdbd] hover:underline font-semibold">Sign in</Link>
+                            </div>
+                        </form>
                     </div>
-                </form>
-
-                {/* Login Link */}
-                <div className="text-center text-sm">
-                    <span className="text-gray-600">Already have an account? </span>
-                    <Link to="/login" className="font-medium text-green-600 hover:text-green-500 transition-colors">
-                        Sign in
-                    </Link>
                 </div>
             </div>
         </div>
