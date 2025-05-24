@@ -29,7 +29,7 @@ const ForgotPassword = () => {
     <div className="w-screen h-screen min-h-0 min-w-0 flex items-stretch justify-center">
       <div className="flex flex-col md:flex-row w-full h-full">
         {/* Left Side - Image & Text */}
-        <div className="md:w-1/2 w-full flex flex-col justify-between bg-black/60 relative min-h-[300px] hidden md:flex" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1533106272418-ac3034f1b4d5?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+        <div className="md:w-1/2 hidden md:flex flex-col justify-between bg-black/60 relative min-h-[300px]" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1533106272418-ac3034f1b4d5?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
           <div className="p-8 flex-1 flex flex-col justify-center">
             <div className="flex items-center mb-8">
               <img src="/mainlogo.png" alt="Logo" className="h-8 w-8 mr-2" />
