@@ -44,7 +44,6 @@ const Login = () => {
         <div className="md:w-1/2 w-full flex flex-col justify-between bg-black/60 relative min-h-[300px]" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
           <div className="p-8 flex-1 flex flex-col justify-center">
             <div className="flex items-center mb-8">
-              <img src="/mainlogo.png" alt="Logo" className="h-8 w-8 mr-2" />
               <span className="text-white text-2xl font-bold italic tracking-wide">PGify</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">Keep it special</h2>
@@ -55,9 +54,7 @@ const Login = () => {
               <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-instagram"></i></a>
             </div>
           </div>
-          <div className="text-center pb-4">
-            <span className="bg-white px-4 py-1 rounded-full text-xs text-[#18191A] font-semibold shadow">presented by PGify</span>
-          </div>
+          
         </div>
         {/* Right Side - Login Form */}
         <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
@@ -70,7 +67,6 @@ const Login = () => {
                 <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-google"></i></button>
                 <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-linkedin-in"></i></button>
               </div>
-              <span className="text-white/60 text-xs mb-2">or use your email account</span>
             </div>
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
@@ -102,7 +98,7 @@ const Login = () => {
                 </div>
               </div>
               <div className="flex justify-end mb-2">
-                <Link to="#" className="text-xs text-[#10bdbd] hover:underline">Forgot your password?</Link>
+                <Link to="/forgot-password" className="text-xs text-[#10bdbd] hover:underline">Forgot your password?</Link>
               </div>
               <button
                 type="submit"

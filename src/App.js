@@ -26,6 +26,8 @@ import AdminContacts from './pages/AdminContacts';
 import CancelBooking from './pages/CancelBooking';
 import AllRooms from './pages/AllRooms';
 import NotFound from './pages/NotFound';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 const App = () => {
   return (
@@ -41,6 +43,8 @@ const App = () => {
         <Route path="/availableRooms" element={<AvailableRooms />} />
         <Route path="/room/:roomId" element={<RoomDetails />} />
         <Route path="/all-rooms" element={<AllRooms />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         
         {/* Protected User Routes */}
         <Route path="/Bookroom/:roomId" element={<ProtectedRoute><BookRoom /></ProtectedRoute>} />

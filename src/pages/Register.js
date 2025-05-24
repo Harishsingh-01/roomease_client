@@ -74,22 +74,18 @@ const Register = () => {
                             <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-instagram"></i></a>
                         </div>
                     </div>
-                    <div className="text-center pb-4">
-                        <span className="bg-white px-4 py-1 rounded-full text-xs text-[#18191A] font-semibold shadow">presented by PGify</span>
-                    </div>
+                    
                 </div>
                 {/* Right Side - Register Form */}
                 <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
                     <div className="w-full max-w-sm mx-auto">
                         <div className="flex flex-col items-center mb-6">
-                            <img src="/mainlogo.png" alt="Logo" className="h-10 w-10 mb-2" />
                             <span className="text-white text-2xl font-bold italic tracking-wide mb-2">PGify</span>
                             <div className="flex space-x-3 mb-2">
                                 <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-facebook-f"></i></button>
                                 <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-google"></i></button>
                                 <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-linkedin-in"></i></button>
                             </div>
-                            <span className="text-white/60 text-xs mb-2">or use your email account</span>
                         </div>
                         <form onSubmit={handleRegister} className="space-y-5">
                             <div>
