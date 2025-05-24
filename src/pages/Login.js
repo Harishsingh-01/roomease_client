@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Mail, Lock } from "lucide-react";
 import API from "../utils/axiosInstance";
 import toast from "react-hot-toast";
+import { FaGoogle, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,19 @@ const Login = () => {
   const location = useLocation();
   const from = location.state?.from || "/";
 
+  useEffect(() => {
+    // Check if user is already logged in
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (token) {
+      if (role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/bookings");
+      }
+    }
+  }, [navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -20,6 +35,8 @@ const Login = () => {
       const res = await API.post("/api/auth/login", { email, password });
       const token = res.data.token;
       localStorage.setItem("token", token);
+      localStorage.setItem("role", res.data.role);
+      localStorage.setItem("userId", res.data.userId); // Store user ID
       const decodedToken = jwtDecode(token);
       const userRole = decodedToken.role;
       toast.success("Login successful!", { position: "top-right" });
@@ -41,7 +58,7 @@ const Login = () => {
     <div className="w-screen h-screen min-h-0 min-w-0 flex items-stretch justify-center">
       <div className="flex flex-col md:flex-row w-full h-full">
         {/* Left Side - Image & Text */}
-        <div className="md:w-1/2 w-full flex flex-col justify-between bg-black/60 relative min-h-[300px]" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+        <div className="md:w-1/2 w-full flex flex-col justify-between bg-black/60 relative min-h-[300px] hidden md:flex" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
           <div className="p-8 flex-1 flex flex-col justify-center">
             <div className="flex items-center mb-8">
               <span className="text-white text-2xl font-bold italic tracking-wide">PGify</span>
