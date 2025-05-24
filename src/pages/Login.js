@@ -22,7 +22,7 @@ const Login = () => {
       localStorage.setItem("token", token);
       const decodedToken = jwtDecode(token);
       const userRole = decodedToken.role;
-      toast.success("Login successful!", { position: "top-center" });
+      toast.success("Login successful!", { position: "top-right" });
       setTimeout(() => {
         if (userRole === "admin") {
           navigate("/admin");
@@ -31,18 +31,18 @@ const Login = () => {
         }
       }, 1000);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Invalid credentials. Please try again.", { position: "top-center" });
+      toast.error(error.response?.data?.message || "Invalid credentials. Please try again.", { position: "top-right" });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#10bdbd] px-2 py-8">
-      <div className="w-full max-w-4xl bg-[#18191A] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
+    <div className="w-screen h-screen min-h-0 min-w-0 flex items-stretch justify-center">
+      <div className="flex flex-col md:flex-row w-full h-full">
         {/* Left Side - Image & Text */}
-        <div className="md:w-1/2 w-full relative flex flex-col justify-between bg-black/60" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
-          <div className="p-8">
+        <div className="md:w-1/2 w-full flex flex-col justify-between bg-black/60 relative min-h-[300px]" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+          <div className="p-8 flex-1 flex flex-col justify-center">
             <div className="flex items-center mb-8">
               <img src="/mainlogo.png" alt="Logo" className="h-8 w-8 mr-2" />
               <span className="text-white text-2xl font-bold italic tracking-wide">PGify</span>
@@ -60,8 +60,8 @@ const Login = () => {
           </div>
         </div>
         {/* Right Side - Login Form */}
-        <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-8 bg-[#18191A]">
-          <div className="w-full max-w-sm">
+        <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
+          <div className="w-full max-w-sm mx-auto">
             <div className="flex flex-col items-center mb-6">
               <img src="/mainlogo.png" alt="Logo" className="h-10 w-10 mb-2" />
               <span className="text-white text-2xl font-bold italic tracking-wide mb-2">PGify</span>
@@ -119,6 +119,9 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <style>{`
+        html, body, #root { height: 100%; margin: 0; padding: 0; }
+      `}</style>
     </div>
   );
 };
