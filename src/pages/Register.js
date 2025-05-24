@@ -82,7 +82,7 @@ const Register = () => {
                     
                 </div>
                 {/* Right Side - Register Form */}
-                <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
+                <div className="md:w-1/2 w-full h-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
                     <div className="w-full max-w-sm mx-auto">
                         <div className="flex flex-col items-center mb-6">
                             <span className="text-white text-2xl font-bold italic tracking-wide mb-2">PGify</span>

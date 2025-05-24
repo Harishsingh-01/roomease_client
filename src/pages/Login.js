@@ -62,7 +62,7 @@ const Login = () => {
           
         </div>
         {/* Right Side - Login Form */}
-        <div className="md:w-1/2 w-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
+        <div className="md:w-1/2 w-full h-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
           <div className="w-full max-w-sm mx-auto">
             <div className="flex flex-col items-center mb-6">
               <img src="/mainlogo.png" alt="Logo" className="h-10 w-10 mb-2" />
