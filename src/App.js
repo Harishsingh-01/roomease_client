@@ -28,8 +28,31 @@ import AllRooms from './pages/AllRooms';
 import NotFound from './pages/NotFound';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import { useAuth } from "./context/AuthContext";
 
 const App = () => {
+  const { logout } = useAuth();
+
+  // Add axios interceptor
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.data?.message === "User account no longer exists") {
+          // Force logout and redirect to login
+          logout();
+          window.location.href = "/login";
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // Cleanup interceptor on unmount
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, [logout]);
+
   return (
     <Router>
       <Toaster />
