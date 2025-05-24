@@ -39,7 +39,7 @@ const UsersData = () => {
 
       const response = await API.delete(`/api/admin/user-delete/${userId}`, {
         headers: { 
-          Authorization: `Bearer ${token}` 
+          Authorization: `${token}` 
         }
       });
 
