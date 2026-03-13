@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://roomeaseserver.onrender.com", 
+  baseURL: "http://localhost:5000", 
   headers: {
     "Content-Type": "application/json",
   },
@@ -9,3 +9,4 @@ const API = axios.create({
 });
 
 export default API;
+//https://roomeaseserver.onrender.com

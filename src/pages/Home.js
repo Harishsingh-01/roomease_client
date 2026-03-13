@@ -4,7 +4,7 @@ import backgroundImage from "./vojtech-bruzek-Yrxr3bsPdS0-unsplash.jpg";
 import API from "../utils/axiosInstance";
 import { 
   Star, Wifi, Coffee, Utensils, Map, Phone, Clock, Search, 
-  ArrowRight, Users, Calendar, DollarSign, Home as HomeIcon, Shield, 
+  ArrowRight, Users, Calendar, IndianRupee, Home as HomeIcon, Shield, 
   Heart, Award, ThumbsUp, ChevronRight, ChevronLeft, X, ChevronDown, CheckCircle2, XCircle
 } from 'lucide-react';
 
@@ -70,19 +70,19 @@ const Home = () => {
 
   const testimonials = [
     {
-      name: "John Doe",
+      name: "Rahul Sharma",
       role: "Business Traveler",
       text: "The rooms are spacious and well-maintained. The staff is extremely helpful and professional.",
       rating: 5
     },
     {
-      name: "Sarah Smith",
+      name: "Priya Patel",
       role: "Family Vacation",
       text: "Perfect location and amazing amenities. Our family had a wonderful stay!",
       rating: 4
     },
     {
-      name: "Mike Johnson",
+      name: "Amit Kumar",
       role: "Solo Traveler",
       text: "Great value for money. The room was clean and comfortable.",
       rating: 5
@@ -213,7 +213,7 @@ const Home = () => {
                     <h3 className="font-semibold text-gray-800">{room.name}</h3>
                     <p className="text-sm text-gray-600">{room.type}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <DollarSign className="w-4 h-4 text-green-600" />
+                      <IndianRupee className="w-4 h-4 text-green-600" />
                       <span className="font-semibold text-green-600">₹{room.price}</span>
                       <span className="text-sm text-gray-500">/Month</span>
             </div>
@@ -271,7 +271,7 @@ const Home = () => {
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-xl font-bold text-gray-800">{room.name}</h3>
                     <div className="flex items-center text-green-600">
-                      <DollarSign className="w-5 h-5 mr-1" />
+                      <IndianRupee className="w-5 h-5 mr-1" />
                       <span className="text-xl font-bold">₹{room.price}</span>
                       <span className="text-sm text-gray-500 ml-1">/Month</span>
                   </div>

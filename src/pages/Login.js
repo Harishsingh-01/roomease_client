@@ -43,93 +43,102 @@ const Login = () => {
   };
 
   return (
-    <div className="w-screen h-screen min-h-0 min-w-0 flex items-stretch justify-center">
-      <div className="flex flex-col md:flex-row w-full h-full">
-        {/* Left Side - Image & Text */}
-        <div className="md:w-1/2 hidden md:flex flex-col justify-between bg-black/60 relative min-h-[300px]" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
-          <div className="p-8 flex-1 flex flex-col justify-center">
-            <div className="flex items-center mb-8">
-              <span className="text-white text-2xl font-bold italic tracking-wide">PGify</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">Keep it special</h2>
-            <p className="text-white/80 text-lg mb-8">Capture your personal memories in a unique way, anywhere.</p>
-            <div className="flex space-x-4 mt-8">
-              <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-twitter"></i></a>
-              <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-facebook"></i></a>
-              <a href="#" className="text-white hover:text-[#10bdbd] transition"><i className="fab fa-instagram"></i></a>
+    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-[#0a192f] to-[#064e3b]">
+      {/* Decorative Orbs */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl translate-y-1/2 pointer-events-none"></div>
+      
+      {/* Glass Card Container */}
+      <div className="relative w-full max-w-md p-8 mx-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
+        
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center items-center mb-4">
+            <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
+              <img src="/mainlogo.png" alt="Logo" className="w-8 h-8" />
             </div>
           </div>
-          
+          <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">Welcome Back</h2>
+          <p className="text-emerald-100/60 text-sm">Please sign in to continue to PGify</p>
         </div>
-        {/* Right Side - Login Form */}
-        <div className="md:w-1/2 w-full h-full flex flex-col justify-center items-center p-8 bg-[#18191A] min-h-[300px]">
-          <div className="w-full max-w-sm mx-auto">
-            <div className="flex flex-col items-center mb-6">
-              <img src="/mainlogo.png" alt="Logo" className="h-10 w-10 mb-2" />
-              <span className="text-white text-2xl font-bold italic tracking-wide mb-2">PGify</span>
-              <div className="flex space-x-3 mb-2">
-                <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-facebook-f"></i></button>
-                <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-google"></i></button>
-                <button className="border border-white/20 rounded-full p-2 text-white hover:bg-[#10bdbd]/20 transition"><i className="fab fa-linkedin-in"></i></button>
-              </div>
+
+        {/* Login Form */}
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-1">
+            <label className="text-white/80 text-sm font-medium ml-1">Email Address</label>
+            <div className="relative group">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-emerald-400 transition-colors">
+                <Mail className="h-5 w-5" />
+              </span>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:bg-white/10 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all duration-300"
+                placeholder="nome@example.com"
+              />
             </div>
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Email</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"><Mail className="h-5 w-5" /></span>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3 rounded-lg bg-[#232526] text-white placeholder-white/40 border border-white/10 focus:ring-2 focus:ring-[#10bdbd] focus:outline-none transition"
-                    placeholder="Enter your email"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-white/80 text-sm mb-1">Password</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40"><Lock className="h-5 w-5" /></span>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-3 rounded-lg bg-[#232526] text-white placeholder-white/40 border border-white/10 focus:ring-2 focus:ring-[#10bdbd] focus:outline-none transition"
-                    placeholder="Enter your password"
-                  />
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[#10bdbd] transition"
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
-                </div>
-              </div>
-              <div className="flex justify-end mb-2">
-                <Link to="/forgot-password" className="text-xs text-[#10bdbd] hover:underline">Forgot your password?</Link>
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className={`w-full py-3 rounded-lg text-white font-semibold text-lg transition-all duration-300 ${loading ? "bg-[#10bdbd]/60 cursor-not-allowed" : "bg-[#10bdbd] hover:bg-[#0ea5a5]"}`}
-              >
-                {loading ? "Signing in..." : "SIGN IN"}
-              </button>
-              <div className="text-center text-sm mt-4">
-                <span className="text-white/60">Don't have an account? </span>
-                <Link to="/register" className="text-[#10bdbd] hover:underline font-semibold">Sign up</Link>
-              </div>
-            </form>
           </div>
+
+          <div className="space-y-1">
+            <div className="flex justify-between items-center ml-1">
+              <label className="text-white/80 text-sm font-medium">Password</label>
+              <Link to="/forgot-password" className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">
+                Forgot Password?
+              </Link>
+            </div>
+            <div className="relative group">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-emerald-400 transition-colors">
+                <Lock className="h-5 w-5" />
+              </span>
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-12 pr-12 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:bg-white/10 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 outline-none transition-all duration-300"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-emerald-400 transition-colors focus:outline-none"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-3.5 rounded-xl text-white font-semibold text-lg shadow-[0_4px_14px_0_rgba(16,185,129,0.39)] transition-all duration-300 
+              ${loading 
+                ? "bg-emerald-500/50 cursor-not-allowed" 
+                : "bg-emerald-500 hover:bg-emerald-400 hover:shadow-[0_6px_20px_rgba(16,185,129,0.23)] hover:-translate-y-0.5 active:translate-y-0"
+              }`}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Signing in...
+              </span>
+            ) : "Sign In"}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <div className="mt-8 text-center text-sm">
+          <span className="text-white/60">Don't have an account? </span>
+          <Link to="/register" className="text-emerald-400 font-semibold hover:text-emerald-300 transition-colors">
+            Create an account
+          </Link>
         </div>
       </div>
-      <style>{`
-        html, body, #root { height: 100%; margin: 0; padding: 0; }
-      `}</style>
     </div>
   );
 };

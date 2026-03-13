@@ -4,7 +4,7 @@ import roomImage from "./download.jpg";
 import { useNavigate, Link } from "react-router-dom";
 import { 
   Hotel, Trash2, Edit, Eye, Plus, Users, Book, 
-  DollarSign, Percent, TrendingUp, BarChart4, Key, Calendar,
+  IndianRupee, Percent, TrendingUp, BarChart4, Key, Calendar,
   ArrowRight, ChevronRight, Activity, CreditCard, Clock,
   LayoutDashboard
 } from "lucide-react";
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
         const token = localStorage.getItem("token");
         
         // Fetch rooms data
-        const roomsRes = await API.get("/api/rooms", {
+        const roomsRes = await API.get("/api/rooms/admin/all", {
           headers: { Authorization: `${token}` },
         });
         setRooms(roomsRes.data);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
         const totalRooms = roomsRes.data.length;
         const availableRooms = roomsRes.data.filter(room => room.available).length;
         const bookedRooms = totalRooms - availableRooms;
-        const occupancyRate = (bookedRooms / totalRooms) * 100;
+        const occupancyRate = totalRooms > 0 ? (bookedRooms / totalRooms) * 100 : 0;
 
         setStats({
           totalRooms,
@@ -282,7 +282,7 @@ const AdminDashboard = () => {
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors duration-300">{room.name}</h3>
                     <div className="flex items-center text-emerald-400">
-                        <DollarSign className="h-5 w-5 mr-1" />
+                        <IndianRupee className="h-5 w-5 mr-1" />
                       <span className="font-bold text-lg">{room.price}</span>
                       <span className="text-slate-400 text-sm ml-1">/Month</span>
                     </div>

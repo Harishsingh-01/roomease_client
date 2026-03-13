@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import API from "../utils/axiosInstance";
-import { Calendar, Clock, DollarSign, Hotel, CheckCircle, XCircle, Star } from "lucide-react";
+import { Calendar, Clock, IndianRupee, Hotel, CheckCircle, XCircle, Star } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 
 
@@ -87,7 +87,7 @@ const Bookings = () => {
                 <div className="p-6 space-y-4">
                   {/* Price */}
                   <div className="flex items-center text-gray-900">
-                    <DollarSign className="h-5 w-5 text-green-500 mr-2" />
+                    <IndianRupee className="h-5 w-5 text-green-500 mr-2" />
                     <span className="text-xl font-bold">
                       ₹{booking.roomId?.price || "N/A"}
                     </span>
